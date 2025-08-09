@@ -2,8 +2,7 @@ const withNextIntl = require('next-intl/plugin')('./i18n.ts')
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Temporarily disable static export for development
-  // output: 'export',
+  output: 'export',
   trailingSlash: true,
   images: {
     unoptimized: true
