@@ -1,6 +1,6 @@
 # B(H)log - Personal Blog with Chat Interface
 
-![Blog Main](public/images/main.png)
+![Blog Main](../public/images/main.png)
 
 [![Next.js](https://img.shields.io/badge/Next.js-111111?logo=nextdotjs&logoColor=white)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-2F74C0?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)

@@ -7,6 +7,8 @@
 [![Cloudflare Pages](https://img.shields.io/badge/Cloudflare%20Pages-242424?logo=cloudflare&logoColor=F38020)](https://pages.cloudflare.com/)
 [![Claude](https://img.shields.io/badge/Claude-Code-242424?logo=claude&logoColor=#D97757)](https://www.anthropic.com/)
 
+[한국어로 읽기](https://github.com/iamb0ttle/my-blog/blob/main/docs/README-ko.md)
+
 A modern personal blog with a ChatBot-style interface built with Next.js 14, featuring dark/light mode, internationalization (Korean/English), and a unique chat bubble post layout.
 
 ## ✨ Features
