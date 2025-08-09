@@ -33,7 +33,7 @@ export async function generateMetadata({ params: { locale } }: AboutPageProps): 
       type: 'profile',
       images: [
         {
-          url: '/og-about-image.svg',
+          url: `${baseUrl}/og-about-image.svg`,
           width: 1200,
           height: 630,
           alt: `${aboutT('title')} ${siteTitle}`,

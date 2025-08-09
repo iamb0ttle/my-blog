@@ -42,7 +42,9 @@ export async function generateMetadata({ params: { locale, slug } }: PostPagePro
   const siteTitle = 'B(H)log';
   const author = '나병현';
   const url = `${baseUrl}/${locale}/post/${slug}`;
-  const ogImage = post.featuredImage || '/og-post-image.svg';
+  const ogImage = post.featuredImage 
+    ? (post.featuredImage.startsWith('http') ? post.featuredImage : `${baseUrl}${post.featuredImage}`)
+    : `${baseUrl}/og-post-image.svg`;
   
   return {
     title: `${post.title} - ${siteTitle}`,
