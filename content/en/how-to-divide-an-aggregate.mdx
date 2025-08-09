@@ -1,0 +1,44 @@
+---
+title: "How to Divide an Aggregate"
+excerpt: "Considerations and guidelines for setting an Aggregate's size and boundaries in DDD."
+date: "2025-07-09"
+tags: ["Aggregate", "DDD", "Design"]
+---
+
+# Overview
+_This document summarizes the way to set up an Aggregate's size and boundary._
+
+# Introduction
+An **Aggregate** is a cluster of domain objects treated as a single unit. How an aggregate is divided can directly affect system performance, making the decision critical.
+
+This document explains effective ways to divide an Aggregate.
+
+# Way to Divide an Aggregate
+When dividing an aggregate, it is generally good to keep it as small as possible. However, the dividing standard should be determined not solely by minimal size but by considering domain invariants, system processing capacity, synchronicity requirements, and other factors.
+
+### Transactional Consistency Boundary
+The purpose of the Transactional Consistency Boundary is to ensure that changes maintain a consistent state.
+
+Check the following to determine this boundary:
+- [ ] Do changes to these objects need to be committed together?
+- [ ] If they are not changed in one transaction, will domain rules be broken?
+
+**Example:** In a shopping system, `Order` and `OrderLineItem` must be stored together. In this case, both belong to the same aggregate.
+
+### Business Invariants
+Ensure that the domain’s business rules are always satisfied. Objects essential for enforcing a domain rule should be in the same aggregate.
+
+### Concurrency and Access Frequency
+Group objects in a way that maximizes throughput and minimizes collisions. This often means placing frequently accessed or updated objects together.
+
+### Lifecycle Cohesion
+Objects with the same lifecycle should belong to the same aggregate.
+
+### Reference and Navigation
+Minimize dependencies between aggregates by controlling references and navigation paths to maintain independence.
+
+### Strong vs. Eventual Consistency
+Balancing performance and scalability is key. In some cases, related objects do not need immediate updates and can be synchronized later via events or messages.
+
+# Final Thoughts
+Defining aggregate boundaries is complex and not straightforward. However, the better the division, the more the system’s performance can improve. Time spent carefully designing aggregate boundaries is never wasted.

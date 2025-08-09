@@ -1,0 +1,53 @@
+---
+title: "How to Divide the Bounded Context?"
+excerpt: "Considerations and guidelines for dividing bounded contexts in DDD."
+date: "2025-07-08"
+tags: ["Bounded-Context"]
+---
+
+# Overview
+_This document summarizes ways to divide the Bounded Context._
+
+# Introduction
+A **Bounded Context** is a clearly defined boundary that uses specific terms with precise meanings. In other words, it is an explicit boundary within which the domain model applies and maintains consistency.
+
+Within each context, terms have their own distinct meaning. Therefore, the objects in a bounded context are more cohesive and explicit.
+
+Well-divided contexts can increase development productivity and become a standard for good design. This document explains methods for dividing bounded contexts effectively.
+
+# How to Divide the Bounded Context
+In Domain-Driven Design (DDD), there is no single definitive standard for dividing a bounded context. Instead, multiple factors should be considered.
+
+### Ubiquitous Language
+Ubiquitous Language is the most common criterion for division. If the same term is used with different meanings, it is a signal to separate into different contexts.
+
+For example, the term “Order” may mean different things in the Marketing domain, Delivery domain, and Accounting domain — these should be treated as different contexts.
+
+### Business Function or Process
+Bounded contexts can be divided by business processes.  
+For example, the process of canceling an order belongs to the Order domain.
+
+### Independent Model & Data Ownership
+Each context should have its own domain model and data storage. One context should not directly reference another’s data; interaction should happen through an API gateway or events.
+
+### Correspond with Team Boundary or Structure
+According to **Conway’s Law**, team structures influence system architecture. Dividing contexts based on team boundaries can increase cohesion and reduce coupling.
+
+### Domain Event and Flow Analysis
+Analyzing events can reveal dependency flows between contexts. If an event triggers work that uses a different model, the contexts should be separated.
+
+### Policy and Rule-Based Separation
+If different rules apply in different areas, those areas should be separate contexts.
+
+# Context Map
+When dividing contexts is difficult, you can use a **Context Map** as a tool.  
+A context map visualizes communication, integration, dependency separation, and relationships between bounded contexts.
+
+![Mishra, A. (2021, June 29). DDD Context Mapping by example: Policy Management. Alok Mishra. https://alok-mishra.com/2021/06/29/ddd-context-mapping-by-example-policy-management/](https://alok-mishra.com/wp-content/uploads/2021/06/screen-shot-2021-06-29-at-3.19.26-pm.png?w=1024)
+
+You can create a context map using tools such as **PlantUML + Context Map DSL**, **Structurizr**, or **Draw.io / Lucidchart**.
+
+# Final Thoughts
+Bounded Context is a key concept for effectively applying DDD, and knowing how to divide it is even more important. I have learned ways to divide bounded contexts and understood the value of context maps.
+
+If you need to create a context map with your team, this [article](https://www.globalapptesting.com/engineering/domain-cartographers-how-to-draw-a-context-map) can serve as a useful reference.

@@ -1,0 +1,39 @@
+---
+title: "When to Use a Domain Service in DDD"
+excerpt: "Key situations where applying a Domain Service is more suitable than Entities or Value Objects."
+date: "2025-07-10"
+tags: ["Domain Service", "Domain", "DDD", "Design"]
+---
+
+# Overview
+_This document summarizes when to use a Domain Service._
+
+# Introduction
+A **Domain Service** in Domain-Driven Design (DDD) is responsible for handling important domain logic that doesn’t naturally fit into an **Entity** or **Value Object** (VO).  
+While an **Application Service** coordinates use cases or transaction flows, a **Domain Service** encapsulates significant business rules within the domain model.
+
+If we place business logic inside an Application Service instead of a Domain Service, it can lead to:  
+- Reduced cohesion in the domain model  
+- Decreased maintainability  
+- Increased testing complexity  
+
+Therefore, knowing when to introduce a Domain Service is critical for a clean DDD design. This document explains the key cases where a Domain Service is appropriate.
+
+# Cases That Require a Domain Service
+There are three major cases where using a Domain Service is recommended:
+
+1. **Business rules span multiple entities**  
+   - When business rules are intertwined across different entities, it’s difficult to keep them within a single domain model.  
+   - In this case, moving the logic to a Domain Service improves clarity and maintainability.
+
+2. **Logic feels unnatural inside an entity**  
+   - Adding certain rules directly into an entity may blur its responsibility or violate the **Single Responsibility Principle (SRP)**.  
+   - Example: Placing an `OrderPolicyDecisionService` inside the Order entity is unnatural — deciding policies isn’t the direct responsibility of the Order itself.
+
+3. **Pure logic without state but still part of the domain**  
+   - Sometimes, a domain contains important concepts that consist only of logic, without any persistent state.  
+   - Examples include tax calculation, discount policies, or reward point calculations.
+
+# Final Thoughts
+Domain Services are just as important as Application Services.  
+A skilled DDD designer should carefully decide when to use each, ensuring that business logic is placed where it belongs for better cohesion, maintainability, and testability.

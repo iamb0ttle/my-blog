@@ -1,0 +1,26 @@
+---
+title: "DDD에서의 애그리게이트란?"
+excerpt: "도메인 주도 설계에서 애그리게이트의 정의와 역할"
+date: "2025-07-07"
+tags: ["애그리게이트", "DDD", "설계"]
+---
+
+# 개요
+_이 문서는 DDD에서 애그리게이트의 정의를 정리한 것이다._
+
+# 서론
+**애그리게이트(Aggregate)** 는 도메인 주도 설계(DDD)의 핵심 구성 요소 중 하나다. 애그리게이트를 사용하면 도메인 객체를 효율적으로 관리할 수 있어, 개발자가 더 나은 소프트웨어 개발에 집중할 수 있다.  
+이 문서에서는 DDD를 잘 이해하기 위해 애그리게이트의 정의를 정리한다.
+
+# 애그리게이트
+애그리게이트는 하나의 단위로 취급할 수 있는 도메인 객체들의 집합이다. 그 목적은 도메인 모델, 트랜잭션 등 전반에 걸쳐 관리의 일관성을 보장하는 것이다.
+
+![출처: Designing DDD aggregates, Albert Llousas, 2022년 10월 26일, https://medium.com/@albert.llousas/designing-ddd-aggregates-db633f1caf88](https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fmiro.medium.com%2Fv2%2Fresize%3Afit%3A1200%2F0*PBHIxQ_6i5R0dm3V&f=1&nofb=1&ipt=c8e3493dfe1b98dfbea800d16deb4e81b74893ba6f4aaf37642089d1cb2a43db)
+
+애그리게이트에는 **애그리게이트 루트(Aggregate Root)** 라는 진입점이 있다. 애그리게이트 루트는 외부 객체가 애그리게이트 내부에 접근할 수 있도록 하는 루트 엔티티다.  
+애그리게이트의 상태를 변경하는 모든 작업은 반드시 애그리게이트 루트를 거쳐야 하며, 이를 통해 루트는 전체 집합에 대한 일관성 규칙을 강제한다.
+
+# 마무리
+이번 기회를 통해 애그리게이트의 정의를 알게 되었고, 객체를 애그리게이트로 잘 묶을수록 개발 생산성이 향상된다는 것을 깨달았다.
+
+애그리게이트를 나누는 방법에 대해서는 [이 게시글](https://blog.iambottle.site/ko/post/how-to-divide-an-aggregate/)이 좋은 인사이트가 될 수 있다.

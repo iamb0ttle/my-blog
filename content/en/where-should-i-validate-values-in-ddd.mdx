@@ -1,0 +1,106 @@
+---
+title: "Where Should I Validate Values in DDD?"
+excerpt: "Understanding which layer is responsible for different types of validation in Domain-Driven Design."
+date: "2025-07-08"
+tags: ["validation", "DDD", "Design"]
+---
+
+# Overview
+_This document explains **where** different types of value validation should occur in a DDD-based system._
+
+# Introduction
+Validation is essential in any software system — but not all validation is the same. Different types of validation belong in different layers, depending on their responsibility and characteristics.
+
+In this document, we categorize validations and explain which layer should handle each type.
+
+# Layer Context
+DDD (**Domain-Driven Design**) is a **design approach**, not a fixed architecture.  
+You can apply it to various architectures such as **Hexagonal**, **Layered**, or **Clean Architecture**.
+
+However, **the correct validation location doesn’t depend on the architecture style** — it’s determined by the responsibility of the layer.
+
+# Validation Locations
+For simplicity, let's consider three main types of validations:
+
+- **Input value / Required value**  
+- **Use case conditions**  
+- **Domain invariant conditions**  
+
+## 1. Input value / Required value → **Presentation Layer**
+- **Definition**: Data entered by the user, and fields that must be filled in.  
+- **Why here**: Closest to the user, so feedback can be given immediately.  
+- **Examples**: String length, regex patterns, required fields, number ranges, date formats.  
+
+**Typical roles in architectures:**
+- Hexagonal → Adapter  
+- Layered → Controller  
+- Clean → Interface Adapter  
+
+**Example:**
+```js
+// JavaScript client/server validation
+if (!email.includes("@")) {
+  alert("Invalid email address");
+}
+```
+
+```csharp
+// ASP.NET model validation
+[Required]
+[StringLength(20)]
+public string UserName { get; set; }
+```
+
+## 2. Use case conditions → **Application Layer**
+
+* **Definition**: Checks related to system operations from the user's perspective.
+* **Why here**: Ensures the correct sequence or eligibility before involving the domain layer.
+* **Examples**: Login attempt limits, permission checks, precondition validation.
+
+**Typical roles in architectures:**
+
+* Hexagonal → Application Service / Port
+* Layered → Service
+* Clean → Use Case Layer
+
+**Example:**
+
+```java
+if (loginAttemptService.isExceeded(userId)) {
+    throw new LoginLimitExceededException();
+}
+user.login(password);
+```
+
+## 3. Domain invariant conditions → **Domain Layer**
+
+* **Definition**: Business rules that must **always** hold true in the domain.
+* **Why here**: Protects the integrity of domain objects.
+* **Examples**: "Orders can only be canceled before delivery", "Price must be positive."
+
+**Typical roles in architectures:**
+
+* Hexagonal → Domain Model
+* Layered → Domain Layer Entity / VO
+* Clean → Entity Layer
+
+**Example:**
+
+```java
+public class Product {
+    private Money price;
+
+    public Product(Money price) {
+        if (price.isNegativeOrZero()) {
+            throw new InvalidPriceException();
+        }
+        this.price = price;
+    }
+}
+```
+
+# Final Thoughts
+
+In my earlier projects, I put **most validation in the Presentation Layer** — which was a design mistake.
+Now, I validate values according to **each layer’s responsibility**, which results in cleaner, more maintainable code.
+

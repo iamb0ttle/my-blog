@@ -1,0 +1,57 @@
+---
+title: "DDD Terminology Summarizing"
+excerpt: "A concise summary of Domain-Driven Design (DDD) terminology."
+date: "2025-06-15"
+tags: ["DDD", "Terminology"]
+---
+
+# Overview
+_This document summarizes concisely DDD terminologies._
+
+# A
+- **Aggregate**: Object that binds associated entities and VOs to keep simplicity of domain.
+- **Aggregate Root**: Representative entity of an Aggregate. Aggregate state changes are only accessible through the root, which ensures consistency.
+- **Anti-Corruption Layer (ACL)**: Layer to protect the consistency and independence between the domain layer and external systems.
+
+# B
+- **Bounded Context**: Context that clearly divides the domain area, often aligned to the ubiquitous language.
+
+# C
+- **CQRS**: Command Query Responsibility Segregation — separates command and query responsibilities.
+- **Context Map**: Diagram that shows interactions and relationships between bounded contexts.
+- **Core Domain**: Domain area that gives a business a competitive advantage and contains essential business value (e.g., Google search engine, Netflix recommendation algorithm).
+
+# D
+- **DDD**: Domain-Driven Design — developing software centered on the business domain.
+- **DIP**: Dependency Inversion Principle — both high-level and low-level modules depend on abstractions.
+- **Domain**: The problem area a software system aims to solve.
+- **Domain Event**: Object that represents a specific past event within the domain model.
+- **Domain Model**: Abstraction representing key concepts, relationships, and actions within a business domain.
+- **Domain Service**: Service performing business logic across multiple entities, encapsulating that logic.
+
+# E
+- **Entity**: Object with a unique identifier that maintains identity over time.
+- **Event Storming**: Design methodology focusing on events to understand a business domain.
+
+# F
+- **Factory**: Encapsulation and abstraction pattern for object creation.
+
+# G
+- **Generic Subdomain**: Domain area handling generic functions used by many businesses (e.g., password encryption, user management).
+
+# R
+- **Repository**: Abstract layer that manages the persistence of an Aggregate.
+
+# S
+- **Service**: Object encapsulating business logic not tied to a specific entity or value object.
+- **Strategic Design**: High-level approach to structuring large systems, managing complexity, and focusing on core domains.
+- **Supporting Subdomain**: Subdomain essential to support the core domain but not a direct competitive differentiator.
+
+# T
+- **Tactical Design**: Detailed design approach for implementing domain models within individual bounded contexts.
+
+# U
+- **Ubiquitous Language**: Shared terminology used by domain experts, developers, and all team members.
+
+# V
+- **Value Object**: Object defined solely by its value, with no identifier; equality is determined by value.

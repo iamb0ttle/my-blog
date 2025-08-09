@@ -1,0 +1,26 @@
+---
+title: "What is an Aggregate in DDD?"
+excerpt: "Definition and role of Aggregates in Domain-Driven Design."
+date: "2025-07-07"
+tags: ["Aggregate", "DDD", "Design"]
+---
+
+# Overview
+_This document summarizes the definition of an Aggregate in DDD._
+
+# Introduction
+The **Aggregate** is one of the core components of Domain-Driven Design (DDD). By using aggregates, we can manage domain objects more effectively, allowing developers to focus on building high-quality software.  
+This document summarizes the definition of an aggregate to aid in understanding DDD.
+
+# Aggregate
+An **Aggregate** is a cluster of domain objects that can be treated as a single unit. Its primary purpose is to ensure consistent management across domain models, transactions, and related operations.
+
+![Llousas, A. (2022, October 26). Designing DDD aggregates. Medium. https://medium.com/@albert.llousas/designing-ddd-aggregates-db633f1caf88](https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fmiro.medium.com%2Fv2%2Fresize%3Afit%3A1200%2F0*PBHIxQ_6i5R0dm3V&f=1&nofb=1&ipt=c8e3493dfe1b98dfbea800d16deb4e81b74893ba6f4aaf37642089d1cb2a43db)
+
+An aggregate has an entry point called the **Aggregate Root** — the root entity that external objects use to access elements inside the aggregate.  
+All operations that modify the state of the aggregate must go through the aggregate root, ensuring that the root enforces consistency rules for the entire cluster.
+
+# Final Thoughts
+Through this, I have learned the definition of an aggregate and realized that the more effectively we group objects into aggregates, the greater the increase in development productivity.
+
+For details on how to divide aggregates, refer to [this article](https://blog.iambottle.site/en/post/how-to-divide-an-aggregate/).

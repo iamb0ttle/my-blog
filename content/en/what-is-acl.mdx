@@ -1,0 +1,98 @@
+---
+title: "What is ACL (Anti-Corruption Layer) and How to Implement It"
+excerpt: "Definition of Anti-Corruption Layer in DDD and practical implementation methods."
+date: "2025-07-09"
+tags: ["Anti-Corruption Layer", "ACL", "DDD", "Design"]
+---
+
+# Overview
+_This document summarizes the definition of the ACL (Anti-Corruption Layer) and how to implement it._
+
+# Introduction
+Imagine unwashed people entering your clean house — it would quickly become dirty.  
+Now, imagine having an automatic shower at your entrance: people would be cleaned before entering, keeping your house spotless.
+
+The **ACL (Anti-Corruption Layer)** works in a similar way.
+
+ACL prevents “corruption” between layers or systems. Its role is crucial in maintaining the purity of your internal domain model.
+
+This document explains the definition of ACL and practical ways to implement it, so we can understand it clearly and apply it effectively.
+
+# ACL (Anti-Corruption Layer) Definition
+The ACL is a software architecture concept, especially emphasized in Domain-Driven Design (DDD).  
+It acts as a buffer between different systems or subdomains, preventing the internal domain model from being directly contaminated by external system models or APIs.
+
+In short, the ACL **isolates internal systems from external models and designs** to avoid corruption.  
+It does this by quarantining dependencies via Translators, Adapters, Facades, and similar patterns.
+
+Because you cannot control external systems, any model changes on their side could affect you. The ACL shields your domain from such influence, making its role essential.
+
+# Ways to Implement ACL
+There are many ways to implement an ACL, but the three most important components are **Translator**, **Adapter**, and **Facade**.
+
+### Translator / Mapper
+Translates external models into internal ones.  
+External models often use different terminology, rules, or structures than your internal model. The translator ensures they match.
+
+**Example:**
+```java
+public class LegacyUserTranslator {
+    public User toDomain(LegacyUserDto dto) {
+        return new User(dto.fullName, dto.emailAddress, dto.statusCode == 0);
+    }
+}
+```
+
+### Adapter / Gateway
+
+Resolves interface mismatches between systems.
+For example, the external system may expect `fetchUser(String id)`, while your domain requires `User getById(UserId id)`.
+
+**Example:**
+
+```java
+public interface ExternalUserPort {
+    User getUserById(String id); // Internal interface
+}
+
+public class LegacyUserApiAdapter implements ExternalUserPort {
+    private final LegacyApiClient client;
+
+    public User getUserById(String id) {
+        LegacyUserDto dto = client.fetchUser(id); // Call external system
+        return new LegacyUserTranslator().toDomain(dto); // Translate
+    }
+}
+```
+
+### Facade
+
+Provides a high-level interface that combines multiple external calls or complex processes into a domain-friendly form.
+It encapsulates complex interactions in a simple method, improving purity, readability, and maintainability.
+
+**Example:**
+
+```java
+public class ExternalUserFacade {
+    private final ExternalUserPort userPort;
+    private final ExternalPermissionPort permissionPort;
+
+    public DomainUserProfile getUserProfile(String userId) {
+        User user = userPort.getUserById(userId);
+        List<String> permissions = permissionPort.getPermissions(userId);
+        return new DomainUserProfile(user, permissions);
+    }
+}
+```
+
+# Final Thoughts
+
+I had used ACL concepts before — for example, when converting DTOs into ORM entities — without realizing it was part of ACL.
+Now, I understand its purpose and implementation better.
+
+The scope of ACL usage can vary:
+
+* If an external system has only one API, an Adapter may be enough.
+* If it has multiple APIs with complex authentication, authorization, or integration needs, you may combine Adapter + Facade.
+
+The key is to apply ACL appropriately to the situation.

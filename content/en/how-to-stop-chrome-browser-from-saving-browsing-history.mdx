@@ -1,0 +1,61 @@
+---
+title: "How to Stop Chrome Browser from Saving Browsing History"
+excerpt: "Forced to close the Chrome visit record."
+date: "2025-05-03"
+tags: ["Security", "Privacy", "Browser", "Chrome"]
+---
+
+
+# Overview
+_This document outlines how to stop Google Chrome Browser from saving browsing history._
+
+
+# Introduction
+While using Google's Chrome Browser, browsing history is saved automatically—even if you don’t want it to be. For security reasons, it's a good idea to regularly delete your browsing history and cookies, but this can be inconvenient, and some users may simply dislike having their history stored.
+
+However, Chrome only provides an option to **delete** history, not to **stop saving** it. Therefore, a workaround is required to block Chrome from saving your browsing history.
+
+
+# How to Stop Saving Browsing History
+Browsing history is stored in a file on your computer’s hard disk. To stop Chrome from saving history, you can **change the file permissions to read-only**, preventing Chrome from writing to the history file.
+
+### Locate the History File 🔍
+Browsing history is saved in a file named `History`, located differently depending on your OS:
+
+**MacOS**
+```swift
+~/<YourUsername>/Library/Application Support/Google/Chrome/Default
+```
+
+**Windows**
+```sql
+C:\Users\<YourUsername>\AppData\Local\Google\Chrome\User Data\Default\History
+```
+
+Navigate to the respective location on your device.
+
+### Modify Permissions 👨‍🔧
+
+**MacOS**
+```bash
+chmod 444 ~/Library/Application\ Support/Google/Chrome/Default/History
+```
+- Sets the file mode to `444`, meaning **read-only**.
+
+```bash
+chflags uchg ~/Library/Application\ Support/Google/Chrome/Default/History
+```
+- Prevents Chrome from changing the file permissions or recreating the History file.
+
+**Windows**  
+On Windows, use the GUI to set the file to read-only:
+
+1. Right-click the `History` file
+2. Click **Properties**
+3. Check the box labeled **Read-only**
+4. Click **Apply**
+
+
+# Final Thoughts
+After the recent SKT SIM data leak incident, I became more cautious about personal data privacy and wanted to avoid even large companies like Google from storing my activity. While disabling history doesn't stop cookies or cache from being stored, it at least reduces traceability—and those should still be cleared periodically.
+Although I haven't explored them in detail, there also seem to be Chrome extensions that block history storage. If this method gets patched or stops working, exploring such extensions might be a viable alternative.

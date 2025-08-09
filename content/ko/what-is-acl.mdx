@@ -1,0 +1,98 @@
+---
+title: "ACL(Anti-Corruption Layer)란 무엇이며, 구현 방법"
+excerpt: "DDD에서의 ACL 정의와 실전 구현 방법"
+date: "2025-07-09"
+tags: ["반부패 계층", "ACL", "DDD", "설계"]
+---
+
+# 개요
+_이 문서는 ACL(Anti-Corruption Layer)의 정의와 구현 방법을 정리한 것이다._
+
+# 서론
+깨끗한 집에 씻지 않은 사람이 들어오면 집은 금방 더러워질 것이다.  
+하지만 현관에 자동 샤워기가 있다면, 들어오는 사람은 깨끗해지고 집은 청결을 유지할 수 있다.
+
+**ACL(안티 커럽션 레이어: 다른말로 반부패 계층)** 는 이런 자동 샤워기와 같다.
+
+ACL은 계층 또는 시스템 간의 “오염”을 방지한다. 내부 도메인 모델의 순수성을 유지하기 위해 그 역할은 매우 중요하다.
+
+이 문서에서는 ACL의 정의와 실제 구현 방법을 설명하여, ACL을 정확히 이해하고 적용할 수 있도록 한다.
+
+# ACL(Anti-Corruption Layer) 정의
+ACL은 소프트웨어 아키텍처 개념 중 하나로, 특히 도메인 주도 설계(DDD)에서 강조된다.  
+서로 다른 시스템이나 서브도메인 사이에서 버퍼 역할을 하여, 외부 시스템 모델이나 API가 내부 도메인 모델을 직접 오염시키는 것을 방지한다.
+
+즉, ACL은 **외부 모델·설계로부터 내부 시스템을 격리**하여 오염을 막는다.  
+이를 위해 Translator, Adapter, Facade 등의 형태로 의존성을 차단한다.
+
+외부 시스템은 내부에서 제어할 수 없으므로, 모델이 변경되면 영향을 미칠 수 있다. ACL은 이런 영향을 차단하는 방패 역할을 한다.
+
+# ACL 구현 방법
+ACL 구현 방식은 다양하지만, 핵심적인 3가지 구성 요소는 **Translator**, **Adapter**, **Facade**이다.
+
+### Translator / Mapper
+외부 모델을 내부 모델로 변환한다.  
+외부 모델은 내부 모델과 비교해 용어, 규칙, 구조가 다를 수 있으므로 이를 번역한다.
+
+**예시:**
+```java
+public class LegacyUserTranslator {
+    public User toDomain(LegacyUserDto dto) {
+        return new User(dto.fullName, dto.emailAddress, dto.statusCode == 0);
+    }
+}
+```
+
+### Adapter / Gateway
+
+시스템 간 인터페이스 불일치를 해결한다.
+예를 들어, 외부 시스템이 `fetchUser(String id)` 형태를 요구하지만, 내부 도메인은 `User getById(UserId id)` 형태를 필요로 할 수 있다.
+
+**예시:**
+
+```java
+public interface ExternalUserPort {
+    User getUserById(String id); // 내부에서 기대하는 형태
+}
+
+public class LegacyUserApiAdapter implements ExternalUserPort {
+    private final LegacyApiClient client;
+
+    public User getUserById(String id) {
+        LegacyUserDto dto = client.fetchUser(id); // 외부 시스템 호출
+        return new LegacyUserTranslator().toDomain(dto); // 변환
+    }
+}
+```
+
+### Facade
+
+여러 외부 호출이나 복잡한 처리를 도메인 친화적인 형태로 묶어 제공한다.
+복잡한 상호작용을 단일 메서드로 캡슐화하여 순수성, 가독성, 유지보수성을 높인다.
+
+**예시:**
+
+```java
+public class ExternalUserFacade {
+    private final ExternalUserPort userPort;
+    private final ExternalPermissionPort permissionPort;
+
+    public DomainUserProfile getUserProfile(String userId) {
+        User user = userPort.getUserById(userId);
+        List<String> permissions = permissionPort.getPermissions(userId);
+        return new DomainUserProfile(user, permissions);
+    }
+}
+```
+
+# 마무리
+
+나는 DTO를 ORM 엔티티로 변환할 때 ACL 개념을 사용하고 있었지만, 그때는 이것이 ACL인 줄 몰랐다.
+이번에 ACL의 개념과 구현 방법을 정확히 이해하게 되었다.
+
+ACL의 적용 범위는 상황에 따라 다르다.
+
+* 외부 시스템에 API가 하나라면 Adapter만으로 충분하다.
+* 여러 API가 있고 인증·권한·통합이 복잡하다면 Adapter + Facade를 함께 사용할 수 있다.
+
+중요한 것은 상황에 맞게 ACL을 적절히 적용하는 것이다.

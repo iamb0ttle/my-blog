@@ -1,0 +1,68 @@
+---
+title: "크롬 브라우저 방문 기록 저장 중지 방법"
+excerpt: "Chrome 방문 기록 강제 차단하기"
+date: "2025-05-03"
+tags: ["보안", "프라이버시", "브라우저", "크롬"]
+---
+
+
+# 개요
+_이 문서는 Google Chrome 브라우저에서 방문 기록이 저장되지 않도록 하는 방법을 정리한 것이다._
+
+
+# 서론
+Google Chrome 브라우저를 사용할 때, 원치 않아도 방문 기록이 자동으로 저장된다. 보안상의 이유로 방문 기록과 쿠키를 주기적으로 삭제하는 것이 좋지만, 이 과정이 번거롭거나 아예 기록이 남는 것을 원치 않는 사용자도 있다.
+
+하지만 Chrome은 기록을 **삭제**하는 기능만 제공할 뿐, **저장을 중지**하는 옵션은 없다. 따라서 기록 저장을 차단하려면 우회적인 방법을 사용해야 한다.
+
+
+# 방문 기록 저장 중지 방법
+Chrome의 방문 기록은 PC의 하드 디스크에 있는 파일에 저장된다. 따라서 해당 파일의 **권한을 읽기 전용(read-only)** 으로 변경하면 Chrome이 기록을 작성할 수 없게 된다.
+
+### 기록 파일 찾기 🔍
+방문 기록은 `History`라는 파일에 저장되며, OS별 저장 경로는 다음과 같다.
+
+**MacOS**
+```swift
+~/<YourUsername>/Library/Application Support/Google/Chrome/Default
+````
+
+**Windows**
+
+```sql
+C:\Users\<YourUsername>\AppData\Local\Google\Chrome\User Data\Default\History
+```
+
+본인의 OS에 맞는 경로로 이동한다.
+
+### 권한 변경하기 👨‍🔧
+
+**MacOS**
+
+```bash
+chmod 444 ~/Library/Application\ Support/Google/Chrome/Default/History
+```
+
+* 파일 모드를 `444`로 설정하여 **읽기 전용**으로 만든다.
+
+```bash
+chflags uchg ~/Library/Application\ Support/Google/Chrome/Default/History
+```
+
+* Chrome이 파일 권한을 변경하거나 History 파일을 새로 만드는 것을 방지한다.
+
+**Windows**
+Windows에서는 GUI를 이용해 읽기 전용으로 변경할 수 있다.
+
+1. `History` 파일을 마우스 오른쪽 클릭
+2. **속성(Properties)** 클릭
+3. **읽기 전용(Read-only)** 체크
+4. **적용(Apply)** 클릭
+
+# 마무리
+
+최근 SKT 유심 데이터 유출 사건 이후, 개인정보 보안에 더 신경을 쓰게 되었고, Google과 같은 대기업이라도 내 활동 기록을 저장하지 않도록 하고 싶었다.
+물론 기록 저장을 막아도 쿠키나 캐시는 여전히 남기 때문에, 주기적으로 별도로 삭제하는 것이 좋다.
+
+추가로, 방문 기록 저장을 막아주는 Chrome 확장 프로그램도 있는 것으로 보이지만, 아직 깊게 확인하지는 않았다. 만약 이 방법이 패치되거나 동작하지 않게 된다면, 해당 확장 프로그램을 대안으로 고려할 수 있을 것이다.
+

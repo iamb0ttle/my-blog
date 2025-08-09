@@ -1,0 +1,105 @@
+---
+title: "Exploring Process Scheduling"
+excerpt: "Fundamental exploration of process scheduling"
+date: "2025-05-17"
+tags: ["OS", "Operating System", "Process", "Scheduling"]
+---
+
+
+# Overview
+*This document explores and organizes logical considerations and research on process scheduling techniques used in operating systems.*
+
+
+# Introduction
+Today, we can run multiple programs on a single computer and switch between them seamlessly. While this may seem natural, it is in fact enabled by a key function of operating systems called **process scheduling**. As such, process scheduling is a fundamental concept that, though often taken for granted, is essential to the functionality of modern operating systems.
+
+Scheduling techniques differ slightly depending on the goals of the operating system, such as efficiency and responsiveness. This document does not focus on a specific scheduling method, but rather investigates the common objectives and principles that process scheduling in operating systems seeks to achieve.
+
+
+# What is Process Scheduling?
+Process scheduling refers to the mechanism by which the operating system decides **which process in the ready state should be assigned the CPU, when, and for how long.**
+
+Although operating systems vary in specific design goals, most generally aim to:
+
+- Improve **throughput**
+- Minimize **turnaround time**
+- Enhance **availability**
+- Increase **reliability**
+
+To support these goals, process scheduling typically aims to:
+
+- Maximize **CPU utilization**
+- Increase **throughput**
+- Minimize **response time**
+- Optimize **waiting time** and **turnaround time**
+- Ensure **fairness**
+
+In essence, process scheduling determines when and how much CPU time each process should receive, based on the operating system’s performance goals.
+
+
+# Non-Preemptive vs. Preemptive Scheduling
+One of the most critical distinctions in process scheduling is between **non-preemptive** and **preemptive** scheduling. Nearly all scheduling algorithms fall into one of these two categories, and this classification heavily influences their behavior and performance.
+### Non-Preemptive Scheduling
+In non-preemptive scheduling, once a process is assigned the CPU, it **cannot be interrupted** by another process. It retains control until it either finishes execution or voluntarily yields the CPU (e.g., by making an I/O request).
+
+**Advantages:**
+- Low context switching overhead (longer average CPU usage time)
+- Simple and easy to implement
+
+**Disadvantages:**
+- Hard to predict response times
+- May not suit real-time systems
+- Risk of starvation if a process monopolizes the CPU
+
+### Preemptive Scheduling
+Preemptive scheduling allows the operating system to **interrupt and replace a running process** with another, typically higher-priority one. CPU ownership can be forcibly transferred at any time.
+
+**Advantages:**
+- More suitable for multi-user or real-time systems
+- Allows high-priority tasks to be handled more promptly
+
+**Disadvantages:**
+- Higher context switching overhead if CPU control changes frequently
+
+
+# How Process Scheduling Is Implemented
+Given the diversity of modern operating systems (due to varied application demands), implementation details vary. However, the **core objectives remain similar** across most systems.
+
+Process scheduling is generally implemented based on the following metrics:
+1. **CPU Utilization**
+    - Ratio of time CPU is actively used during operation
+    - Ideal utilization: typically 40%–90%+
+        
+2. **Throughput**
+    - Number of processes completed per unit time
+    - E.g., 5 processes completed in one second → throughput = 5 processes/sec
+        
+3. **Waiting Time**
+    - Total time a process spends in the ready queue
+    - Lower average waiting time implies faster system responsiveness
+        
+4. **Turnaround Time**
+    - Time from submission to completion of a process
+    - Formula:  
+        $Turnaround Time = Completion Time - Arrival Time$
+        
+5. **Response Time**
+    - Time from request submission until first CPU allocation
+    - Lower response time improves user-perceived responsiveness
+        
+6. **Fairness**
+    - Degree to which CPU time is evenly distributed among processes without starvation
+        
+7. **Context Switching Overhead**
+    - Cost incurred during process switch
+    - Minimizing this overhead is typically beneficial
+
+Additional factors may apply depending on the system environment (e.g., mobile, server), but these seven metrics are universally important in process scheduling.
+
+
+# Conclusion
+The research shows that although each operating system may implement scheduling differently, all share a common objective: **to mediate between hardware and software, maximizing user experience**. Accordingly, scheduling strategies are tailored to deliver the best possible experience to users under specific conditions.
+
+
+# Final Thoughts
+While studying backend development, I took time to understand process scheduling—a foundational concept in operating systems. This gave me a new appreciation for how seamless multitasking, which we often take for granted, is underpinned by deliberate scheduling strategies that aim to enhance user experience.
