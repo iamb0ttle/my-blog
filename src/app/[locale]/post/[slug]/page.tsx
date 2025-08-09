@@ -67,6 +67,7 @@ export async function generateMetadata({ params: { locale, slug } }: PostPagePro
           width: 1200,
           height: 630,
           alt: post.title,
+          type: 'image/svg+xml',
         },
       ],
     },

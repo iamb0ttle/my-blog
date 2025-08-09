@@ -15,7 +15,7 @@ export async function generateMetadata({ params: { locale } }: AboutPageProps): 
   const aboutT = await getTranslations({ locale, namespace: 'about' });
   
   const siteTitle = siteT('title');
-  const baseUrl = siteT('baseUrl');
+  const baseUrl = 'https://blog.iambottle.site'; // Hard-coded to ensure consistency
   
   const title = `${aboutT('title')} - ${siteTitle}`;
   const description = aboutT('description');
@@ -37,6 +37,7 @@ export async function generateMetadata({ params: { locale } }: AboutPageProps): 
           width: 1200,
           height: 630,
           alt: `${aboutT('title')} ${siteTitle}`,
+          type: 'image/svg+xml',
         },
       ],
     },
