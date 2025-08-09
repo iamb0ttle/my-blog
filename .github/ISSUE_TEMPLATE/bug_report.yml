@@ -1,0 +1,125 @@
+name: 🐛 Bug Report
+description: Report a bug or unexpected behavior
+title: "[Bug] "
+labels: ["bug", "needs-triage"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        버그를 발견해 주셔서 감사합니다! 문제를 빠르게 해결할 수 있도록 아래 정보를 제공해 주세요.
+        
+        Thank you for finding a bug! Please provide the information below to help us resolve the issue quickly.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: 🐛 Bug Description / 버그 설명
+      description: What happened? / 무엇이 일어났나요?
+      placeholder: Please describe the bug clearly... / 버그를 명확하게 설명해 주세요...
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: 🔄 Steps to Reproduce / 재현 단계
+      description: How can we reproduce this bug? / 이 버그를 어떻게 재현할 수 있나요?
+      placeholder: |
+        1. Go to '...'
+        2. Click on '....'
+        3. Scroll down to '....'
+        4. See error
+      value: |
+        1. 
+        2. 
+        3. 
+        4. 
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: ✅ Expected Behavior / 예상 동작
+      description: What should happen? / 어떤 동작을 예상했나요?
+      placeholder: Describe what you expected to happen... / 예상했던 동작을 설명해 주세요...
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: ❌ Actual Behavior / 실제 동작
+      description: What actually happened? / 실제로 무엇이 일어났나요?
+      placeholder: Describe what actually happened... / 실제로 일어난 일을 설명해 주세요...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: browsers
+    attributes:
+      label: 🌐 Browser / 브라우저
+      description: Which browsers are affected? / 어떤 브라우저에서 발생하나요?
+      multiple: true
+      options:
+        - Chrome
+        - Firefox
+        - Safari
+        - Edge
+        - Opera
+        - Other
+
+  - type: dropdown
+    id: devices
+    attributes:
+      label: 📱 Device / 기기
+      description: Which devices are affected? / 어떤 기기에서 발생하나요?
+      multiple: true
+      options:
+        - Desktop
+        - Mobile (iOS)
+        - Mobile (Android)
+        - Tablet
+        - Other
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: 🌍 Environment / 환경
+      description: Your environment details / 환경 세부 정보
+      placeholder: |
+        - OS: [e.g. macOS 14.0, Windows 11, Ubuntu 22.04]
+        - Browser version: [e.g. Chrome 119.0]
+        - Screen resolution: [e.g. 1920x1080]
+      value: |
+        - OS: 
+        - Browser version: 
+        - Screen resolution: 
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: 📸 Screenshots / 스크린샷
+      description: Add screenshots if applicable / 해당되는 경우 스크린샷을 추가해 주세요
+      placeholder: You can drag and drop images here... / 여기에 이미지를 드래그 앤 드롭할 수 있습니다...
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: 📝 Additional Context / 추가 정보
+      description: Any other context about the problem? / 문제에 대한 다른 정보가 있나요?
+      placeholder: Add any other context, logs, or related issues... / 다른 정보, 로그 또는 관련 이슈를 추가해 주세요...
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: ✅ Checklist / 체크리스트
+      description: Please confirm the following / 다음 사항을 확인해 주세요
+      options:
+        - label: I have searched for existing issues / 기존 이슈를 검색했습니다
+          required: true
+        - label: I have provided all the required information / 필요한 모든 정보를 제공했습니다
+          required: true
+        - label: This issue is reproducible / 이 이슈는 재현 가능합니다
+          required: true

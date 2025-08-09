@@ -1,0 +1,141 @@
+name: ✨ Feature Request
+description: Suggest a new feature or enhancement
+title: "[Feature] "
+labels: ["enhancement", "needs-triage"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        새로운 기능이나 개선사항을 제안해 주셔서 감사합니다! 아이디어를 구체화할 수 있도록 아래 정보를 제공해 주세요.
+        
+        Thank you for suggesting a new feature or enhancement! Please provide the information below to help us understand your idea.
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: 💡 Feature Summary / 기능 요약
+      description: Brief description of the feature / 기능에 대한 간단한 설명
+      placeholder: Summarize your feature request in one or two sentences... / 기능 요청을 한두 문장으로 요약해 주세요...
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: 🤔 Problem / 문제점
+      description: What problem does this feature solve? / 이 기능이 해결하는 문제는 무엇인가요?
+      placeholder: |
+        Describe the problem you're trying to solve...
+        What's frustrating or missing in the current experience?
+      value: |
+        현재 경험에서 불편하거나 부족한 점:
+        
+        Current frustration or missing aspect:
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: 💡 Proposed Solution / 제안하는 해결책
+      description: How would you like this feature to work? / 이 기능이 어떻게 작동하기를 원하나요?
+      placeholder: |
+        Describe your ideal solution...
+        How should it behave? What should users see?
+      value: |
+        제안하는 해결책:
+        
+        Proposed solution:
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: 🎯 Priority / 우선순위
+      description: How important is this feature to you? / 이 기능이 얼마나 중요한가요?
+      options:
+        - Low (Nice to have / 있으면 좋음)
+        - Medium (Would improve experience / 경험을 개선함)
+        - High (Important for workflow / 워크플로우에 중요함)
+        - Critical (Blocking current use / 현재 사용을 막고 있음)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: 🏷️ Category / 카테고리
+      description: What type of feature is this? / 어떤 종류의 기능인가요?
+      options:
+        - UI/UX Improvement (UI/UX 개선)
+        - New Blog Feature (새로운 블로그 기능)
+        - Performance (성능)
+        - Accessibility (접근성)
+        - SEO Enhancement (SEO 개선)
+        - Mobile Experience (모바일 경험)
+        - Dark Mode / Theme (다크모드/테마)
+        - Language Support (언어 지원)
+        - Content Management (콘텐츠 관리)
+        - Other (기타)
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: 🔄 Alternative Solutions / 대안
+      description: Have you considered other ways to solve this? / 이를 해결하는 다른 방법을 고려해 보셨나요?
+      placeholder: |
+        What alternatives have you considered?
+        Why is your proposed solution better?
+      value: |
+        고려한 대안:
+        
+        Considered alternatives:
+
+  - type: textarea
+    id: examples
+    attributes:
+      label: 📋 Examples / 예시
+      description: Any examples from other sites or apps? / 다른 사이트나 앱의 예시가 있나요?
+      placeholder: |
+        Share links, screenshots, or describe similar features you've seen elsewhere...
+        이와 비슷한 기능을 본 곳의 링크, 스크린샷 또는 설명을 공유해 주세요...
+
+  - type: textarea
+    id: mockups
+    attributes:
+      label: 🎨 Mockups / 목업
+      description: Any mockups or wireframes? / 목업이나 와이어프레임이 있나요?
+      placeholder: You can drag and drop images here... / 여기에 이미지를 드래그 앤 드롭할 수 있습니다...
+
+  - type: textarea
+    id: implementation
+    attributes:
+      label: 🛠️ Implementation Ideas / 구현 아이디어
+      description: Any technical ideas on how to implement this? / 구현 방법에 대한 기술적 아이디어가 있나요?
+      placeholder: |
+        If you have technical background, share your implementation thoughts...
+        기술적 배경이 있다면 구현에 대한 생각을 공유해 주세요...
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: 📝 Additional Context / 추가 정보
+      description: Anything else we should know? / 알아야 할 다른 것이 있나요?
+      placeholder: Any other context, related features, or considerations... / 다른 정보, 관련 기능 또는 고려사항...
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: ✅ Checklist / 체크리스트
+      description: Please confirm the following / 다음 사항을 확인해 주세요
+      options:
+        - label: I have searched for existing feature requests / 기존 기능 요청을 검색했습니다
+          required: true
+        - label: I have provided a clear use case / 명확한 사용 사례를 제공했습니다
+          required: true
+        - label: This feature would benefit multiple users / 이 기능은 여러 사용자에게 도움이 될 것입니다
+          required: true

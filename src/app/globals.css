@@ -1,0 +1,440 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+
+    --primary: 0 0% 9%;
+    --primary-foreground: 0 0% 98%;
+
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 0 0% 3.9%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 0 0% 83.1%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+  .line-clamp-3 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+}
+
+/* KaTeX and code highlighting styles are imported in PostContent component */
+
+/* Custom code block styling */
+.hljs {
+  background: hsl(var(--muted)) !important;
+  color: hsl(var(--muted-foreground)) !important;
+  padding: 1rem !important;
+  border-radius: 0.5rem !important;
+}
+
+/* Math rendering improvements */
+.katex-display {
+  margin: 1.5rem 0;
+  overflow-x: auto;
+}
+
+.katex-inline {
+  font-size: inherit;
+}
+
+/* Table of Contents styling */
+.toc {
+  background: hsl(var(--muted));
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin: 1.5rem 0;
+}
+
+.toc h2 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.toc ul {
+  margin: 0;
+  padding-left: 1.5rem;
+}
+
+.toc li {
+  margin: 0.25rem 0;
+}
+
+.toc a {
+  color: hsl(var(--muted-foreground));
+  text-decoration: none;
+}
+
+.toc a:hover {
+  color: hsl(var(--primary));
+  text-decoration: underline;
+}
+
+/* Task list styling */
+.task-list-item {
+  list-style: none;
+  margin-left: -1.5rem;
+}
+
+.task-list-item input[type="checkbox"] {
+  margin-right: 0.5rem;
+}
+
+/* Heading anchor links */
+.anchor {
+  float: left;
+  padding-right: 4px;
+  margin-left: -20px;
+  line-height: 1;
+}
+
+.anchor:focus {
+  outline: none;
+}
+
+/* Custom scrollbar for code blocks */
+pre::-webkit-scrollbar {
+  height: 8px;
+}
+
+pre::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+pre::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 4px;
+}
+
+pre::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground));
+}
+
+/* Main content scrollbar styling */
+main::-webkit-scrollbar {
+  width: 8px;
+}
+
+main::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+main::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 4px;
+}
+
+main::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground));
+}
+
+/* Sidebar scrollbar styling */
+.sidebar-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--border)) transparent;
+}
+
+.sidebar-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar-scroll::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 3px;
+}
+
+.sidebar-scroll::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground));
+}
+
+/* Ensure scroll isolation */
+.sidebar-scroll {
+  overscroll-behavior: contain;
+}
+
+main {
+  overscroll-behavior: contain;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+main {
+  scroll-behavior: smooth;
+}
+
+/* Enhanced dark mode support for KaTeX */
+.dark .katex {
+  color: hsl(var(--foreground)) !important;
+}
+
+.dark .katex .base {
+  color: hsl(var(--foreground)) !important;
+}
+
+/* Figure styling */
+.figure {
+  margin: 1.5rem 0;
+  text-align: center;
+}
+
+.figure img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+}
+
+.dark .figure img {
+  box-shadow: 0 4px 6px -1px rgb(255 255 255 / 0.1);
+}
+
+.figure figcaption {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: hsl(var(--muted-foreground));
+  font-style: italic;
+}
+
+/* Enhanced footnote styling */
+.footnotes {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid hsl(var(--border));
+}
+
+.footnotes ol {
+  font-size: 0.875rem;
+  color: hsl(var(--muted-foreground));
+}
+
+.footnotes li {
+  margin-bottom: 0.5rem;
+}
+
+.footnotes .footnote-backref {
+  color: hsl(var(--primary));
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.footnotes .footnote-backref:hover {
+  text-decoration: underline;
+}
+
+/* Enhanced definition list styling */
+dl {
+  margin: 1rem 0;
+}
+
+dt {
+  font-weight: 600;
+  color: hsl(var(--foreground));
+  margin-top: 1rem;
+}
+
+dt:first-child {
+  margin-top: 0;
+}
+
+dd {
+  margin: 0.25rem 0 0.25rem 1rem;
+  padding-left: 1rem;
+  border-left: 2px solid hsl(var(--muted));
+  color: hsl(var(--muted-foreground));
+}
+
+/* Improved mark/highlight styling */
+mark {
+  background-color: rgb(254 240 138);
+  color: rgb(133 77 14);
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.25rem;
+}
+
+.dark mark {
+  background-color: rgb(133 77 14 / 0.3);
+  color: rgb(254 240 138);
+}
+
+/* Enhanced keyboard shortcut styling */
+kbd {
+  background: hsl(var(--muted));
+  border: 1px solid hsl(var(--border));
+  border-bottom: 2px solid hsl(var(--border));
+  color: hsl(var(--foreground));
+  font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+}
+
+.dark kbd {
+  background: hsl(var(--muted));
+  border-color: hsl(var(--border));
+  box-shadow: 0 1px 2px 0 rgb(255 255 255 / 0.05);
+}
+
+/* Sidebar collapsible animations */
+.sidebar-collapsible {
+  transition: max-height 0.2s ease-out, opacity 0.15s ease-out;
+  overflow: hidden;
+}
+
+.sidebar-collapsible-enter {
+  max-height: 0;
+  opacity: 0;
+}
+
+.sidebar-collapsible-enter-active {
+  max-height: 1000px;
+  opacity: 1;
+}
+
+.sidebar-collapsible-exit {
+  max-height: 1000px;
+  opacity: 1;
+}
+
+.sidebar-collapsible-exit-active {
+  max-height: 0;
+  opacity: 0;
+}
+
+/* Enhanced table styling */
+.prose table {
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  min-width: 100%;
+  overflow: hidden;
+  border-radius: 0.5rem;
+  border: 1px solid hsl(var(--border));
+}
+
+.prose th {
+  background-color: hsl(var(--muted) / 0.5);
+  font-weight: 600;
+  text-align: left;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid hsl(var(--border));
+}
+
+.prose td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid hsl(var(--border));
+}
+
+.prose tr:last-child td {
+  border-bottom: none;
+}
+
+.prose tr:nth-child(even) {
+  background-color: hsl(var(--muted) / 0.25);
+}
+
+/* Better focus indicators */
+.prose a:focus,
+.prose button:focus,
+.prose details summary:focus {
+  outline: 2px solid hsl(var(--primary));
+  outline-offset: 2px;
+  border-radius: 0.25rem;
+}
+
+/* Minimal transitions for theme switching - only for critical elements */
+.theme-transition {
+  transition-property: color, background-color, border-color;
+  transition-duration: 75ms;
+  transition-timing-function: ease-out;
+}
+
+/* Ensure proper contrast in both modes */
+.dark {
+  color-scheme: dark;
+}
+
+.light {
+  color-scheme: light;
+}

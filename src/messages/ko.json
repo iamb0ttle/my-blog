@@ -1,0 +1,69 @@
+{
+  "common": {
+    "search": "검색...",
+    "about": "소개",
+    "posts": "게시글",
+    "darkMode": "다크 모드",
+    "lightMode": "라이트 모드",
+    "toggleTheme": "테마 전환",
+    "language": "언어"
+  },
+  "home": {
+    "title": "안녕하세요! 무엇을 도와드릴까요?",
+    "placeholder": "메시지를 입력하거나 검색어를 입력하세요...",
+    "recentPosts": "최근 게시글",
+    "allPosts": "모든 게시글",
+    "searchResults": "검색 결과",
+    "noResults": "검색 결과가 없습니다",
+    "noResultsDesc": "다른 키워드로 시도해보세요",
+    "relevance": "관련도"
+  },
+  "post": {
+    "publishedAt": "게시일",
+    "readingTime": "읽는 시간",
+    "minutes": "분",
+    "tags": "태그",
+    "comments": "댓글"
+  },
+  "sidebar": {
+    "chats": "게시글",
+    "about": "소개",
+    "contact": "연락처",
+    "github": "GitHub",
+    "linkedin": "LinkedIn",
+    "email": "이메일",
+    "noPosts": "게시글이 없습니다"
+  },
+  "about": {
+    "title": "소개",
+    "description": "블로그 운영자에 대한 정보",
+    "greeting": "안녕하세요, 나병현입니다 :)",
+    "bio": "LLM 기반 아키텍처 설계와 서버 설계에 관심있는 AI 엔지니어 입니다.",
+    "basicInfo": "기본 정보",
+    "interests": "관심사",
+    "techStack": "기술 스택",
+    "contact": "연락하기"
+  },
+  "footer": {
+    "disclaimer": "나병현은 실수를 할 수 있습니다. 중요한 내용은 다시 확인해보세요.",
+    "copyright": "All rights reserved",
+    "description": "기술적인 이야기와 일상을 공유합니다"
+  },
+  "site": {
+    "baseUrl": "https://dev.iambottle.site",
+    "title": "B(H)log",
+    "description": "Technology Stories & Life - 기술적인 이야기와 일상",
+    "author": "나병현",
+    "ogImage": "/og-image.svg",
+    "sitemap": "https://dev.iambottle.site/sitemap.xml"
+  },
+  "contact": {
+    "email": "nbhyun0329@gmail.com",
+    "github": "https://github.com/iamb0ttle",
+    "linkedin": "https://linkedin.com/in/your-profile",
+    "giscusRepo": "iamb0ttle/my-blog"
+  },
+  "schema": {
+    "context": "https://schema.org"
+  }
+}

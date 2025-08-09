@@ -1,0 +1,69 @@
+{
+  "common": {
+    "search": "Search...",
+    "about": "About",
+    "posts": "Posts",
+    "darkMode": "Dark Mode",
+    "lightMode": "Light Mode",
+    "toggleTheme": "Toggle Theme",
+    "language": "Language"
+  },
+  "home": {
+    "title": "Hello! How can I help you today?",
+    "placeholder": "Type a message or search...",
+    "recentPosts": "Recent Posts",
+    "allPosts": "All Posts",
+    "searchResults": "Search Results",
+    "noResults": "No search results found",
+    "noResultsDesc": "Try different keywords",
+    "relevance": "Relevance"
+  },
+  "post": {
+    "publishedAt": "Published at",
+    "readingTime": "Reading time",
+    "minutes": "minutes",
+    "tags": "Tags",
+    "comments": "Comments"
+  },
+  "sidebar": {
+    "chats": "Posts",
+    "about": "About",
+    "contact": "Contact",
+    "github": "GitHub",
+    "linkedin": "LinkedIn",
+    "email": "Email",
+    "noPosts": "No posts available"
+  },
+  "about": {
+    "title": "About",
+    "description": "Information about the blog owner",
+    "greeting": "Hello, I'm a Byeonghyeon Na :)",
+    "bio": "AI engineers interested in LLM-based architecture design and server design",
+    "basicInfo": "Basic Info",
+    "interests": "Interests",
+    "techStack": "Tech Stack",
+    "contact": "Get in Touch"
+  },
+  "footer": {
+    "disclaimer": "Byeonghyeon Na can make mistakes. Check important info.",
+    "copyright": "All rights reserved",
+    "description": "Sharing tech stories and daily life"
+  },
+  "site": {
+    "baseUrl": "https://dev.iambottle.site",
+    "title": "B(H)log",
+    "description": "Technology Stories & Life - A blog sharing tech stories and daily life",
+    "author": "Byeonghyeon Na",
+    "ogImage": "/og-image.svg",
+    "sitemap": "https://dev.iambottle.site/sitemap.xml"
+  },
+  "contact": {
+    "email": "nbhyun0329@gmail.com",
+    "github": "https://github.com/iamb0ttle",
+    "linkedin": "https://linkedin.com/in/your-profile",
+    "giscusRepo": "iamb0ttle/my-blog"
+  },
+  "schema": {
+    "context": "https://schema.org"
+  }
+}

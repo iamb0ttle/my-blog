@@ -1,0 +1,102 @@
+name: 💬 General Issue
+description: General questions, discussions, or other topics
+title: "[General] "
+labels: ["question", "discussion"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        일반적인 질문이나 논의사항이 있으신가요? 언제든 편하게 이야기해 주세요!
+        
+        Do you have general questions or topics to discuss? Feel free to share anytime!
+
+  - type: dropdown
+    id: type
+    attributes:
+      label: 📝 Issue Type / 이슈 타입
+      description: What type of issue is this? / 어떤 종류의 이슈인가요?
+      options:
+        - Question (질문)
+        - Discussion (논의)
+        - Documentation (문서)
+        - Content Request (콘텐츠 요청)
+        - Feedback (피드백)
+        - Support (지원)
+        - Other (기타)
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: 📋 Description / 설명
+      description: Please describe your issue or question / 이슈나 질문을 설명해 주세요
+      placeholder: |
+        What would you like to discuss or ask about?
+        무엇에 대해 논의하거나 질문하고 싶으신가요?
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: 🌍 Context / 배경
+      description: Any relevant background information? / 관련된 배경 정보가 있나요?
+      placeholder: |
+        Provide any context that might be helpful...
+        도움이 될 수 있는 배경 정보를 제공해 주세요...
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: 🎯 Related Area / 관련 영역
+      description: Which area does this relate to? / 어떤 영역과 관련이 있나요?
+      multiple: true
+      options:
+        - Blog Content (블로그 콘텐츠)
+        - User Experience (사용자 경험)
+        - Technical Implementation (기술적 구현)
+        - Design (디자인)
+        - Performance (성능)
+        - SEO (검색 엔진 최적화)
+        - Accessibility (접근성)
+        - Mobile Experience (모바일 경험)
+        - Internationalization (국제화)
+        - Other (기타)
+
+  - type: textarea
+    id: expectations
+    attributes:
+      label: 💭 What are you hoping for? / 기대하는 것
+      description: What kind of response or outcome are you looking for? / 어떤 응답이나 결과를 기대하고 계신가요?
+      placeholder: |
+        What would be most helpful to you?
+        무엇이 가장 도움이 될까요?
+
+  - type: textarea
+    id: resources
+    attributes:
+      label: 🔗 Related Resources / 관련 자료
+      description: Any links, articles, or references? / 링크, 기사 또는 참고 자료가 있나요?
+      placeholder: |
+        Share any relevant links, articles, or resources...
+        관련된 링크, 기사 또는 자료를 공유해 주세요...
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: 📝 Additional Information / 추가 정보
+      description: Anything else you'd like to add? / 추가로 말씀하고 싶은 것이 있나요?
+      placeholder: Any other thoughts, ideas, or information... / 다른 생각, 아이디어 또는 정보...
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: ✅ Checklist / 체크리스트
+      description: Please confirm the following / 다음 사항을 확인해 주세요
+      options:
+        - label: I have searched for existing discussions / 기존 논의를 검색했습니다
+          required: true
+        - label: My question/topic is clear and specific / 질문/주제가 명확하고 구체적입니다
+          required: true
