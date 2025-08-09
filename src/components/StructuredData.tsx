@@ -1,5 +1,6 @@
 import { Post } from '@/lib/posts'
 import { Locale } from '@/lib/i18n'
+import { getTranslations } from 'next-intl/server'
 
 interface StructuredDataProps {
   type: 'website' | 'article' | 'profile'
@@ -7,19 +8,24 @@ interface StructuredDataProps {
   post?: Post
 }
 
-export function StructuredData({ type, locale, post }: StructuredDataProps) {
-  const baseUrl = 'https://dev.iambottle.site'
-  const siteTitle = 'B(H)log'
-  const siteDescription = locale === 'ko'
-    ? 'Dev Stories & Life - 개발 이야기와 일상'
-    : 'Dev Stories & Life - A blog sharing development stories and daily life'
-  
+export async function StructuredData({ type, locale, post }: StructuredDataProps) {
+  const tSite = await getTranslations('site')
+  const tAbout = await getTranslations('about')
+  const tContact = await getTranslations('contact')
+
+  const baseUrl = tSite('baseUrl')            
+  const siteTitle = tSite('title')            
+  const siteDescription = tSite('description')
+  const authorName = tSite('author')          
+  const ogImage = tSite('ogImage')            
+
   let structuredData: any = {
     '@context': 'https://schema.org',
+    inLanguage: locale,
   }
 
   switch (type) {
-    case 'website':
+    case 'website': {
       structuredData = {
         ...structuredData,
         '@type': 'WebSite',
@@ -28,7 +34,7 @@ export function StructuredData({ type, locale, post }: StructuredDataProps) {
         url: `${baseUrl}/${locale}`,
         author: {
           '@type': 'Person',
-          name: '나병현',
+          name: authorName,
           url: `${baseUrl}/${locale}/about`,
         },
         potentialAction: {
@@ -38,20 +44,25 @@ export function StructuredData({ type, locale, post }: StructuredDataProps) {
         },
       }
       break
+    }
 
-    case 'article':
+    case 'article': {
       if (post) {
-        const articleStructured: any = {
+        const description =
+          post.excerpt ||
+          post.content.slice(0, 160).replace(/[#*`]/g, '')
+
+        structuredData = {
           ...structuredData,
           '@type': 'BlogPosting',
           headline: post.title,
-          description: post.excerpt || post.content.slice(0, 160).replace(/[#*`]/g, ''),
+          description,
           url: `${baseUrl}/${locale}/post/${post.slug}`,
           datePublished: post.date,
           dateModified: post.date,
           author: {
             '@type': 'Person',
-            name: '나병현',
+            name: authorName,
             url: `${baseUrl}/${locale}/about`,
           },
           publisher: {
@@ -59,7 +70,7 @@ export function StructuredData({ type, locale, post }: StructuredDataProps) {
             name: siteTitle,
             logo: {
               '@type': 'ImageObject',
-              url: `${baseUrl}/og-image.svg`,
+              url: ogImage.startsWith('http') ? ogImage : `${baseUrl}${ogImage}`,
             },
           },
           mainEntityOfPage: {
@@ -67,44 +78,41 @@ export function StructuredData({ type, locale, post }: StructuredDataProps) {
             '@id': `${baseUrl}/${locale}/post/${post.slug}`,
           },
           keywords: post.tags?.join(', '),
+          image: post.featuredImage
+            ? {
+                '@type': 'ImageObject',
+                url: post.featuredImage.startsWith('http')
+                  ? post.featuredImage
+                  : `${baseUrl}${post.featuredImage}`,
+                width: 1200,
+                height: 630,
+              }
+            : undefined,
         }
-
-        if (post.featuredImage) {
-          articleStructured.image = {
-            '@type': 'ImageObject',
-            url: post.featuredImage.startsWith('http') ? post.featuredImage : `${baseUrl}${post.featuredImage}`,
-            width: 1200,
-            height: 630,
-          }
-        }
-
-        structuredData = articleStructured
       }
       break
+    }
 
-    case 'profile':
+    case 'profile': {
+      
+      const bio = tAbout('bio')
       structuredData = {
         ...structuredData,
         '@type': 'ProfilePage',
         mainEntity: {
           '@type': 'Person',
-          name: 'B(H)log',
-          description: locale === 'ko' 
-            ? '웹 개발과 사용자 경험에 열정을 가진 풀스택 개발자'
-            : 'Full-stack developer passionate about web development and user experience',
+          name: authorName,
+          description: bio,
           url: `${baseUrl}/${locale}/about`,
-          jobTitle: locale === 'ko' ? '풀스택 개발자' : 'Full-stack Developer',
-          knowsAbout: [
-            'JavaScript',
-            'TypeScript', 
-            'React',
-            'Next.js',
-            'Node.js',
-            'Web Development',
+          sameAs: [
+            tContact('github'),
+            tContact('linkedin'),
+            `mailto:${tContact('email')}`,
           ],
         },
       }
       break
+    }
   }
 
   return (
