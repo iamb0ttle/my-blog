@@ -7,7 +7,7 @@ const inter = Inter({ subsets: ['latin'] })
 
 // Site configuration from messages
 const SITE_CONFIG = {
-  baseUrl: 'https://dev.iambottle.site',
+  baseUrl: 'https://blog.iambottle.site',
   title: 'B(H)log',
   description: 'Dev Stories & Life - 개발 이야기와 일상',
   author: '나병현',

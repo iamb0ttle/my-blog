@@ -3,7 +3,7 @@ import { getAllPosts } from '@/lib/posts'
 import { locales } from '@/lib/i18n'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://dev.iambottle.site'
+  const baseUrl = 'https://blog.iambottle.site'
   
   const staticPages: MetadataRoute.Sitemap = [
     {

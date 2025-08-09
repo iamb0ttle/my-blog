@@ -50,12 +50,12 @@
     "description": "Sharing tech stories and daily life"
   },
   "site": {
-    "baseUrl": "https://dev.iambottle.site",
+    "baseUrl": "https://blog.iambottle.site",
     "title": "B(H)log",
     "description": "Technology Stories & Life - A blog sharing tech stories and daily life",
     "author": "Byeonghyeon Na",
     "ogImage": "/og-image.svg",
-    "sitemap": "https://dev.iambottle.site/sitemap.xml"
+    "sitemap": "https://blog.iambottle.site/sitemap.xml"
   },
   "contact": {
     "email": "nbhyun0329@gmail.com",

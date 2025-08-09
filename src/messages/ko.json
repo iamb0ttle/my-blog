@@ -50,12 +50,12 @@
     "description": "기술적인 이야기와 일상을 공유합니다"
   },
   "site": {
-    "baseUrl": "https://dev.iambottle.site",
+    "baseUrl": "https://blog.iambottle.site",
     "title": "B(H)log",
     "description": "Technology Stories & Life - 기술적인 이야기와 일상",
     "author": "나병현",
     "ogImage": "/og-image.svg",
-    "sitemap": "https://dev.iambottle.site/sitemap.xml"
+    "sitemap": "https://blog.iambottle.site/sitemap.xml"
   },
   "contact": {
     "email": "nbhyun0329@gmail.com",

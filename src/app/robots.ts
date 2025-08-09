@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: ['/api/', '/_next/'],
     },
-    sitemap: 'https://dev.iambottle.site/sitemap.xml',
+    sitemap: 'https://blog.iambottle.site/sitemap.xml',
   }
 }

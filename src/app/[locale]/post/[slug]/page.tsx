@@ -38,7 +38,7 @@ export async function generateMetadata({ params: { locale, slug } }: PostPagePro
     };
   }
 
-  const baseUrl = 'https://dev.iambottle.site';
+  const baseUrl = 'https://blog.iambottle.site';
   const siteTitle = 'B(H)log';
   const author = '나병현';
   const url = `${baseUrl}/${locale}/post/${slug}`;
