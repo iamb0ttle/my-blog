@@ -438,3 +438,19 @@ kbd {
 .light {
   color-scheme: light;
 }
+
+/* Mobile sidebar push effect */
+@media (max-width: 767px) {
+  body:has(.sidebar-mobile-open) .home-main-content,
+  body:has(.sidebar-mobile-open) .post-main-content,
+  body:has(.sidebar-mobile-open) .about-main-content {
+    transform: translateX(320px);
+    transition: transform 0.3s ease-out;
+  }
+  
+  .home-main-content,
+  .post-main-content,
+  .about-main-content {
+    transition: transform 0.3s ease-out;
+  }
+}

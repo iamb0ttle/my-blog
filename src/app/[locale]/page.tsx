@@ -1,10 +1,9 @@
-import { ChatInterface } from '@/components/ChatInterface';
-import { Sidebar } from '@/components/Sidebar';
 import { Locale } from '@/lib/i18n';
 import { getAllPosts } from '@/lib/posts';
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { StructuredData } from '@/components/StructuredData';
 import type { Metadata } from 'next';
+import { HomePageClient } from '@/components/HomePageClient';
 
 interface HomePageProps {
   params: { locale: Locale };
@@ -67,12 +66,7 @@ export default async function HomePage({ params: { locale } }: HomePageProps) {
   return (
     <>
       <StructuredData type="website" locale={locale} />
-      <div className="flex h-screen bg-background overflow-hidden">
-        <Sidebar locale={locale} posts={posts} />
-        <main className="flex-1 flex flex-col overflow-hidden min-w-0">
-          <ChatInterface locale={locale} posts={posts} />
-        </main>
-      </div>
+      <HomePageClient locale={locale} posts={posts} />
     </>
   );
 }

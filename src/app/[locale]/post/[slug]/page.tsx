@@ -93,11 +93,11 @@ export default async function PostPage({ params: { locale, slug } }: PostPagePro
   return (
     <>
       <StructuredData type="article" locale={locale} post={post} />
-      <div className="flex bg-background">
-        <div className="flex-shrink-0 sticky top-0 h-screen overflow-hidden">
+      <div className="flex bg-background h-screen overflow-hidden relative">
+        <div className="flex-shrink-0 h-full overflow-hidden">
           <Sidebar locale={locale} posts={allPosts} />
         </div>
-        <main className="flex-1 min-w-0">
+        <main className="flex-1 min-w-0 overflow-y-auto post-main-content">
           <PostContent post={post} locale={locale} />
           <div className="max-w-4xl mx-auto px-4 md:px-6 pt-2 pb-4">
             <Giscus locale={locale} />

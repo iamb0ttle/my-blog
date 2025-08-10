@@ -58,9 +58,9 @@ export default async function AboutPage({ params: { locale } }: AboutPageProps) 
   return (
     <>
       <StructuredData type="profile" locale={locale} />
-      <div className="flex h-screen bg-background overflow-hidden">
+      <div className="flex h-screen bg-background overflow-hidden relative">
         <Sidebar locale={locale} posts={allPosts} />
-        <main className="flex-1 min-w-0 overflow-y-auto">
+        <main className="flex-1 min-w-0 overflow-y-auto about-main-content">
           <AboutContent locale={locale} />
         </main>
       </div>

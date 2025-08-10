@@ -13,6 +13,7 @@ import Link from 'next/link'
 interface SidebarProps {
   locale: Locale
   posts: Post[]
+  onMobileToggle?: (isOpen: boolean) => void
 }
 
 const MIN_WIDTH = 240
@@ -20,7 +21,7 @@ const MAX_WIDTH = 600
 const DEFAULT_WIDTH = 320
 const COLLAPSED_WIDTH = 64 // 4rem
 
-export function Sidebar({ locale, posts }: SidebarProps) {
+export function Sidebar({ locale, posts, onMobileToggle }: SidebarProps) {
   const [isMobileOpen, setIsMobileOpen] = useState(false)
   const [isCollapsed, setIsCollapsed] = useState(false)
   const [sidebarWidth, setSidebarWidth] = useState(DEFAULT_WIDTH)
@@ -147,7 +148,20 @@ export function Sidebar({ locale, posts }: SidebarProps) {
     })
   }
 
-  const toggleMobileSidebar = () => setIsMobileOpen(!isMobileOpen)
+  const toggleMobileSidebar = () => {
+    const newState = !isMobileOpen
+    setIsMobileOpen(newState)
+    onMobileToggle?.(newState)
+    
+    // Add/remove class from body for CSS-based push effect
+    if (typeof document !== 'undefined') {
+      if (newState) {
+        document.body.classList.add('sidebar-mobile-open')
+      } else {
+        document.body.classList.remove('sidebar-mobile-open')
+      }
+    }
+  }
 
   return (
     <>
@@ -160,13 +174,6 @@ export function Sidebar({ locale, posts }: SidebarProps) {
         {isMobileOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
       </button>
 
-      {/* Backdrop for mobile */}
-      {isMobileOpen && (
-        <div
-          className="md:hidden fixed inset-0 bg-black/50 z-40"
-          onClick={() => setIsMobileOpen(false)}
-        />
-      )}
 
       {/* Sidebar */}
       <div
@@ -175,9 +182,9 @@ export function Sidebar({ locale, posts }: SidebarProps) {
           flex-shrink-0 h-full 
           bg-background border-r border-border
           flex flex-col
-          fixed md:static top-0 left-0 z-50
+          absolute md:static top-0 left-0 z-50
           ${isMobile ? 'h-full' : ''}
-          transform transition-transform duration-150 ease-out
+          transform transition-transform duration-300 ease-out
           ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'}
           md:translate-x-0
           ${isMobile && !isCollapsed ? 'w-80' : ''}
@@ -338,7 +345,11 @@ export function Sidebar({ locale, posts }: SidebarProps) {
                                             key={post.slug}
                                             href={`/${locale}/post/${post.slug}`}
                                             className="block p-2 rounded-md hover:bg-accent hover:text-accent-foreground theme-transition"
-                                            onClick={() => setIsMobileOpen(false)}
+                                            onClick={() => {
+                                              setIsMobileOpen(false)
+                                              onMobileToggle?.(false)
+                                              document.body.classList.remove('sidebar-mobile-open')
+                                            }}
                                           >
                                             <div className="text-sm font-medium truncate">{post.title}</div>
                                             <div className="text-xs text-muted-foreground">
