@@ -6,6 +6,7 @@ import { Calendar, Clock, Hash, CheckCircle, AlertTriangle, Info, XCircle, Exter
 import { ReactNode } from 'react'
 import * as React from 'react'
 import { HeadingAnchor } from './HeadingAnchor'
+import MermaidDiagram from './MermaidDiagram'
 import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
 import remarkGemoji from 'remark-gemoji'
@@ -267,9 +268,18 @@ export async function PostContent({ post, locale }: PostContentProps) {
       <em className="italic text-foreground/90">{children}</em>
     ),
     
-    // Code with better dark mode support
+    // Code with better dark mode support and mermaid handling
     code: ({ children, className }: any) => {
       const isInline = !className
+      
+      // Extract language from className (handles both 'language-mermaid' and 'hljs language-mermaid')
+      const language = className?.match(/language-(\w+)/)?.[1]
+      
+      // Handle mermaid diagrams
+      if (language === 'mermaid' && typeof children === 'string') {
+        return <MermaidDiagram chart={children.trim()} />
+      }
+      
       if (isInline) {
         return (
           <code className="relative rounded bg-muted dark:bg-muted/70 px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold text-foreground border border-border/50">
