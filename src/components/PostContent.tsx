@@ -461,13 +461,13 @@ export async function PostContent({ post, locale }: PostContentProps) {
     <article className="max-w-4xl mx-auto px-4 md:px-6 pt-8 pb-2">
       {/* Featured Image */}
       {post.featuredImage && (
-        <div className="mb-8 -mx-4 md:-mx-6">
+        <div className="mb-8 -mx-4 md:-mx-6 flex justify-center">
           <Image
             src={post.featuredImage}
             alt={post.title}
-            className="w-full h-64 md:h-80 object-cover rounded-xl"
-            width={800} // Added width
-            height={256} // Matches h-64 (64 * 4 for approximate pixel value)
+            className="max-w-full h-auto rounded-xl max-h-96"
+            width={800}
+            height={400}
           />
         </div>
       )}

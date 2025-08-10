@@ -1,0 +1,117 @@
+---
+title: "The Harsh Reality of DevOps for a Broke High School Student"
+date: "2025-08-10"
+tags: ["DevOps", "K3s", "Grafana", "FluxCD", "GitOps", "Prometheus", "Raspberry Pi"]
+description: "A tearful DevOps journey that started with a Raspberry Pi and ended with a dose of reality."
+featuredImage: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRYlDNwD1WqtU85yczbbVkitg6y6LTm1IpZg&s"
+---
+
+# 1. The Beginning — A Reckless Challenge from a Broke High Schooler
+
+One day, I made up my mind:
+
+> "Even though I have little money, I’ll build my own PaaS."
+
+<br/>
+
+The monthly cost of a cloud server felt too heavy.  
+So I chose **a Raspberry Pi 4B (2GB RAM)** with a **64GB SD card**.  
+In fact, it wasn’t brand-new — I bought it second-hand from a friend for **30,000 KRW (~$23)**.  
+This tiny computer became my local data center, where I installed **K3s**, a lightweight Kubernetes distribution.
+
+```bash
+curl -sfL https://get.k3s.io | sh -
+```
+
+I created namespaces and connected my GitHub repository for GitOps.
+At that point, I honestly thought: *Finally! I have my own PaaS.* 🤯
+
+# 2. A Quick Detour — Kubernetes, K3s, and PaaS
+
+While preparing for this project, I refreshed my understanding of Kubernetes fundamentals.
+
+### Kubernetes Core Concepts
+
+* **Cluster** — The entire environment where applications run, made up of multiple servers (nodes).
+* **Master Node** — The brain of the cluster, responsible for scheduling, the API server, and overall state management.
+* **Worker Node** — Where containers actually run, following the Master’s instructions.
+
+Master and Worker Nodes can exist on the same machine or on separate ones.
+**K3s** is a special case where the Master and Worker are combined into a single instance.
+
+### Key Features of K3s
+
+* A lightweight Kubernetes distribution, ideal for IoT and edge computing.
+* Delivered as a single binary for extremely simple installation.
+* **Supports combined Master + Worker node operation**, enabling the full Kubernetes experience on a single device.
+* Perfect for local DevOps experiments and learning.
+
+### What is PaaS (Platform as a Service)?
+
+PaaS is a service model that lets developers deploy and operate applications without worrying about infrastructure.
+It automates server setup, networking, and scaling so developers can focus entirely on writing code.
+
+# 3. First Steps in Observability — Meeting Grafana
+
+After finally setting up K3s, configuring Traefik for proper HTTPS, and confirming GitOps was working via FluxCD,
+I moved on to what I believe is the most important part of service operation: monitoring.
+
+Observability is crucial in any production environment.
+So I installed **Prometheus + Grafana**.
+
+```bash
+helm repo add grafana https://grafana.github.io/helm-charts
+helm install grafana grafana/grafana -n monitoring
+```
+
+When the Grafana dashboard loaded in my browser, I felt truly proud.
+Real-time graphs for CPU, memory, and network usage danced across the screen.
+
+# 4. Reality Check — The Limits of a Raspberry Pi
+
+It didn’t take long for reality to hit me.
+
+![Source: My Raspberry Pi 4B Grafana + Prometheus Monitoring](https://blog.iambottle.site/images/raspberrypi4b-k3s-memory.png)
+
+* CPU usage was **always above 50%**.
+* With only Grafana and Prometheus running, RAM usage hit **1.4GB out of 1.6GB**.
+* The SD card I/O was constantly overwhelmed.
+
+```bash
+kubectl top nodes
+```
+
+The output from this command felt like my Raspberry Pi was crying out: *“Please… stop…”* 😭
+
+# 5. The Decision — The Gap Between Ideals and Reality
+
+At first, it looked amazing.
+Running a K3s cluster at home, with GitOps and a full monitoring stack.
+But reality was harsh.
+
+* For a student, **cloud services were expensive**.
+* Local hardware **wasn’t powerful enough**.
+
+Without money, even DevOps feels out of reach… which is honestly depressing.
+
+# 6. Lessons Learned
+
+1. **Observability is essential** — Without Grafana, I wouldn’t have known when to make these decisions.
+2. **Resources are not infinite** — RAM and I/O hit their limits faster than expected.
+3. **Balancing ideals with reality** — Finding the sweet spot between cost and performance is where DevOps really begins.
+
+# 7. Closing Thoughts
+
+I’ve always been interested in container technologies,
+but Kubernetes always felt like an unscalable wall.
+However, after experiencing a small part of Kubernetes through K3s,
+I feel like I’ve grown much closer to it.
+
+Now, I’m more motivated than ever to study further.
+And I’ve made a big decision — **I’m going to build a mini PC powerful enough to run Kubernetes smoothly**!
+The purchase decision is already made in my heart. 🚀
+
+P.S. One day, I’ll come back with a full K8s cluster and a rock-solid monitoring system. 😎
+For now, my adorable Raspberry Pi 4B is happily running just a few containers. ^o^
+Funny enough, after spending the whole weekend setting up K3s, I ended up going back to plain Docker…
+
