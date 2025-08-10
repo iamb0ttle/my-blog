@@ -30,7 +30,7 @@ export async function generateMetadata({ params: { locale } }: HomePageProps): P
     description,
     keywords: [
       'blog', 'development', 'programming', 'tech', 'coding',
-      '블로그', '개발', '프로그래밍', '기술', '코딩'
+      '블로그', '개발', '프로그래밍', '기술', '코딩', '엔지니어링'
     ],
     authors: [{ name: author }],
     openGraph: {
@@ -45,7 +45,7 @@ export async function generateMetadata({ params: { locale } }: HomePageProps): P
           url: finalOgImage,
           width: 1200,
           height: 630,
-          alt: `${title} - Dev Stories & Life`,
+          alt: `${title} - Technology Stories & Life`,
         },
       ],
     },

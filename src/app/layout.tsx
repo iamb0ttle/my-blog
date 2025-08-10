@@ -9,15 +9,15 @@ const inter = Inter({ subsets: ['latin'] })
 const SITE_CONFIG = {
   baseUrl: 'https://blog.iambottle.site',
   title: 'B(H)log',
-  description: 'Dev Stories & Life - 개발 이야기와 일상',
+  description: 'Technology Stories & Life - 기술적인 이야기와 일상',
   author: '나병현',
-  ogImage: '/og-image.svg'
+  ogImage: '/og-image.png'
 }
 
 export const metadata: Metadata = {
   title: SITE_CONFIG.title,
   description: SITE_CONFIG.description,
-  keywords: ['개발', 'blog', 'development', 'programming', 'tech'],
+  keywords: ['기술', 'blog', 'development', 'programming', 'engineering', 'tech'],
   authors: [{ name: SITE_CONFIG.author }],
   creator: SITE_CONFIG.author,
   publisher: SITE_CONFIG.author,
@@ -39,8 +39,7 @@ export const metadata: Metadata = {
         url: SITE_CONFIG.ogImage,
         width: 1200,
         height: 630,
-        alt: `${SITE_CONFIG.title} - Dev Stories & Life`,
-        type: 'image/svg+xml',
+        alt: `${SITE_CONFIG.title} - Technology Stories & Life`,
       },
     ],
   },

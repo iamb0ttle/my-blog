@@ -44,7 +44,7 @@ export async function generateMetadata({ params: { locale, slug } }: PostPagePro
   const url = `${baseUrl}/${locale}/post/${slug}`;
   const ogImage = post.featuredImage 
     ? (post.featuredImage.startsWith('http') ? post.featuredImage : `${baseUrl}${post.featuredImage}`)
-    : `${baseUrl}/og-post-image.svg`;
+    : `${baseUrl}/og-post-image.png`;
   
   return {
     title: `${post.title} - ${siteTitle}`,
@@ -67,7 +67,6 @@ export async function generateMetadata({ params: { locale, slug } }: PostPagePro
           width: 1200,
           height: 630,
           alt: post.title,
-          type: 'image/svg+xml',
         },
       ],
     },

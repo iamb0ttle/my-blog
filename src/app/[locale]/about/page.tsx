@@ -15,7 +15,7 @@ export async function generateMetadata({ params: { locale } }: AboutPageProps): 
   const aboutT = await getTranslations({ locale, namespace: 'about' });
   
   const siteTitle = siteT('title');
-  const baseUrl = 'https://blog.iambottle.site'; // Hard-coded to ensure consistency
+  const baseUrl = 'https://blog.iambottle.site'
   
   const title = `${aboutT('title')} - ${siteTitle}`;
   const description = aboutT('description');
@@ -33,11 +33,10 @@ export async function generateMetadata({ params: { locale } }: AboutPageProps): 
       type: 'profile',
       images: [
         {
-          url: `${baseUrl}/og-about-image.svg`,
+          url: `${baseUrl}/og-about-image.png`,
           width: 1200,
           height: 630,
           alt: `${aboutT('title')} ${siteTitle}`,
-          type: 'image/svg+xml',
         },
       ],
     },

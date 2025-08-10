@@ -1,7 +1,7 @@
 {
-  "name": "B(H)log - Dev Stories & Life",
+  "name": "B(H)log - Technology Stories & Life",
   "short_name": "B(H)log",
-  "description": "개발 이야기와 일상을 공유하는 블로그",
+  "description": "기술적인 이야기와 일상을 공유하는 블로그",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0A0A0A",
@@ -38,7 +38,7 @@
   "scope": "/",
   "screenshots": [
     {
-      "src": "/og-image.svg",
+      "src": "/og-image.png",
       "sizes": "1200x630",
       "type": "image/svg+xml",
       "form_factor": "wide"
