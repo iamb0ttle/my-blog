@@ -1,0 +1,170 @@
+---
+title: "트랜스포머 모델 구조 분석"
+excerpt: "트랜스포머(Transformer) 모델은 2017년 'Attention is All You Need'라는 구글 연구팀의 논문에서 소개된 인코더(Encoder)-디코더(Decoder)구조를 가진 모델입니다. 트랜스포머는 현대 많은 LLM(Large-Language-Model)의 어머니격 모델로, 그 구조를 이해하는 것은 중요합니다. 따라서 이번 글에서는 트랜스포머 모델의 구조에 대해서 분석하였습니다."
+date: "2025-09-27"
+tags: ["NLP", "AI", "Self-Attention", "Transformer"]
+featuredImage: "https://ichef.bbci.co.uk/ace/standard/1680/cpsprodpb/e00e/live/c1a487e0-50db-11ef-aebc-6de4d31bf5cd.jpg"
+---
+
+# 개요
+저번 Post에서는 NLP 분야에서 혁신적인 메커니즘으로 여겨지는 Attention Mechanism에 대해서 Attention이 등장하게 된 계기와, 어떠한 방식으로 동작하고, Attention을 Transformer 모델에 적용하기 위해 제안된 Self-Attention까지 알아보았습니다.
+
+저번 Post에서도 언급했지만 다시한번 복습하자면, RNN 계열에서는 두가지 문제점으로 인해 모델의 Prediction 성능이 크게 저하되었는데요, 하나는 모델의 입력 시퀀스가 길어질 수록 정보 손실이 이루어지는 것과, 병행 학습에 어려움이 두가지 문제점이었습니다.
+
+이런 문제점을 해결하고자 Attention이라는 메커니즘이 등장했으나, 여전히 RNN의 순차적 구조는 일정 수준 이상의 Prediction 성능을 넘지 못하도록 막는 벽이되었죠.
+
+하지만 2017년 구글의 연구팀이 "Attention Is All You Need"라는 논문을 발표하면서 Self-Attention과 Transformer라는 혁신적인 아이디어를 제안했고, 이후 NLP(Natural Language Processing)분야의 비약적인 성장이 시작되었습니다.
+
+이 글을 쓰고 있는 2025년 9월 26일을 기준으로, LLM(사실은 LMM(Large Multimodal Model)이지만 대중적으로 사용되는 언어이므로 LLM이라고 언급하겠습니다.)의 3대 회사라고 할 수 있는 **'OpenAI', 'Google', 'xAI'** 의 최신 버전 모델은 각각 '**GPT-5**', '**Gemini-2.5 Pro**', '**Grok-4 Heavy**'입니다. 사실 트랜스포머 모델이 이 LLM들의 어머니격 모델이라고 한다면 믿으실수 있겠나요? 트랜스포머 모델이 그정도로 중요한 모델입니다.
+
+이러한 트랜스포머 모델은 어려울 것 같지만, 실제로는 생각보다 단순한 구조를 가지고 있습니다. 따라서 이번 Post에서는 트랜스포머 모델의 구조를 살펴보고, 누구나 쉽게 이해할 수 있도록 돕는 것을 목표로 합니다. 따라서 매우 자세한 세부 사항은 다루지 않으며, 나중에 시간이 나면 제가 조금 더 흥미있는 부분(왜 원본 논문에서는 sin, cos함수를 positional encoding에 사용하는가? 등등..)에 대해 다뤄보도록 하겠습니다.
+
+# Transformer Model 전체적인 구조
+Transformer의 구조를 이해하기 위해서는, 구성요소들이 이루어져 전체적으로 어떤 구조를 이루는지 먼저 보아야합니다.
+
+![출처: Attention Is All You Need 논문 중 발췌](/images/content/transformer/transformer_all.png)
+
+Transformer 모델은 Transformer 모델 등장 이전까지 NLP 분야에서 가장 활발히 언급되고 이슈가 되었던 Seq2Seq 모델의 인코더(Encoder)-디코더(Decoder) 매커니즘을 기본적으로 채택하였습니다. 하지만 인코더와 디코더를 이루는 각각의 구성 레이어들이 Self-Attention 매커니즘을 사용하고 출력 벡터의 결과물이 포함하는 의미가 다르다는 점에서 Seq2Seq모델과 Transformer 모델의 차이점이 있다고 할 수 있겠습니다.
+
+먼저 해당 Post를 이해하기 위해서는, Attention과 Self-Attention에 대한 내용을 이해하고 있다는 것을 가정으로 하기 때문에, 혹시나 이해가 필요하신 분들은 [해당 게시글](https://blog.iambottle.site/ko/post/attention-and-self-attention-why-they-important/)을
+참고하시기 바라겠습니다. 
+
+그럼 지금부터 Transformer 모델의 구성요소들을 하나씩 살펴보며 그 구조를 점차 이해 해보도록 하겠습니다.
+
+# Input Embedding과 Positional Embedding
+먼저, 해당 게시글에서는 보다 쉬운 이해를 위하여 모델의 Input 시퀀스로 "I love you"라는 영어 문장을 최종적으로 Output에서 "나는 너를 사랑해"라는 문장 Output Probabilites를 얻는 것을 목표로 하는 상황을 가정하겠습니다.
+
+먼저, 트랜스포머에서 처음으로 Input이 거치게 되는 Input Embedding과 Positional Embedding 입니다. 
+
+![출처: Attention Is All You Need 논문 중 발췌한 사진을 Excalidraw로 일부 편집 self made](/images/content/transformer/input-embedding.png)
+
+우리는 '나는', '너를', '사랑해'라는 단어의 의미를 잘 알고 있습니다. 이는 우리가 평소에 사용하는 언어니까요. 하지만 컴퓨터는 이를 이해하지 못합니다. 따라서 이를 컴퓨터가 이해할 수 있는 '**벡터(Vector)**'로 변환해야 합니다. 이를 **Input Embedding** 이라고 합니다.
+
+![출처: 자체 제작 by Excalidraw](/images/content/transformer/embedding-process.png)
+
+이제 이렇게 변환된 벡터들을 바로 모델에 통과시키면될까요? Input Embedding은 일종의 '단어장' 입니다. 하지만 원어가 우리가 이해하는 '자연어'이고, 찾는 단어가 컴퓨터가 이해하는 '벡터'일 뿐이죠. 어쨌든 이는 단어장과 같이 동작하기 때문에, 동일한 단어는 동일한 벡터로 변환됩니다.
+
+하지만 다음과 같은 두 문장에서 '너'라는 단어가 가지는 의미가 같은지 살펴봅시다.
+1. 나는 너를 사랑해
+2. 너는 나를 사랑해
+
+첫번째 문장에 '너'는 내가 사랑하는 주체입니다. 하지만 두번째 문장의 '너'는 나를 사랑하는 주체이죠. 하지만 그것은 자연어를 이해하는 우리 입장에서 보일 뿐, 자연어를 모르고 단어장을 보는 모델은 어떤 '너'이든 항상 동일한 벡터로 변환하는 것 입니다. 즉, 위치 정보를 전혀 고려하지 않습니다. 
+
+사실 이러한 문제는 RNN 모델에서는 흔히 볼 수 없는 문제입니다. 왜냐하면, RNN 모델은 순차적 구조, 즉, 도미노 처럼 이전 벡터가 다음 벡터에 영향을 주는 구조이기 때문에 모델이 '너'가 사랑하는 주체인지, 사랑당하는 대상인지 알 수 있습니다. 하지만 계산 효율성을 극대화 하기 위한 Self-Attention 메커니즘에서는, 이러한 순차적 구조를 별로 반기지 않습니다.
+
+따라서 우리는 모델에게, 이 두가지 '너'를 구별하기 위한 **Positional Encoding** 이라는 작업을 수행해야 합니다.
+
+Positional Encoding이란 모델에게 특정 벡터가 전체 시퀀스 내에 '어느 위치'에 존재하는지에 대한 정보를 알려주는 것과 같습니다. 마치 앞에 우리가 사랑해라는 동사의 바로 앞에 나타난 단어는 문장의 주어가 사랑하는 주체라는 것을 이해하는 것과 같죠.
+
+![출처: 자체 제작 by Excalidraw](/images/content/transformer/position-add.png)
+
+Positional Encoding은 벡터들에 특정 벡터값을 더함으로써 위치 정보를 표현합니다.(사진에서는 편한 이해를 위해 위치를 자연어로 표현) 원본 논문에서는, cos 함수와 sin 함수를 사용해 효과적으로 위치 정보를 나타낼 수 있다고 하였습니다. 하지만 이는 제가 아직 잘 이해 못한 부분이긴 하나, 조금 찾아본 결과로는 주기함수가 가지는 특징과 cos함수와 sin함수의 평행이동 관계에서 찾았다고는 했으나. 이는 추후에 조금 더 공부해보도록 하겠습니다.
+
+이렇게 Input Embedding과 Positional Encoding을 마치고 나면, 우리의 원래 문장은 위치 정보를 포함하는 여러개의 벡터로 변환됩니다.
+
+# Multi-Head Attention(Encoder)
+
+![출처: Attention Is All You Need 논문 중 발췌한 사진을 Excalidraw로 일부 편집 self made](/images/content/transformer/multi-head_encoder.png)
+
+다음으로는, 이제 본격적으로 Encoder에서 방금 생성된 벡터를 이용해 Self-Attention을 진행해 문장 내 단어들 간의 관계를 파악하는 Multi-Head Attention을 진행합니다. 
+
+Q, K, V를 이용해 가중치 행렬을 곱해 점차 단어들간의 관계를 잘 설명하는 방향으로 학습합니다. 
+
+학습 과정을 거치며 "I love you"라는 문장에서 I는 love에게 큰 관심도를 가지도록, love는 I와 you에게, you는 love에게 관심도를 가지도록 학습한다는 느낌입니다.
+
+![출처: Attention Is All You Need 논문 중 발췌](/images/content/transformer/multi-head.png)
+
+하지만 왜 "Multi-head" Attention 일까요? 사진에서 보이는 것 처럼, 왼쪽은 우리가 잘 알고 있는 Self-Attention의 모습입니다. Q, K, V를 이용해 내적을 진행해서 최종적으로 하나의 결과 벡터를 생성합니다. 이렇게 하나의 벡터를 생성하는 Q, K, V를 한개의 'Head'라고 부릅니다. 이러한 'Head'를 여러개 배치한다면, 여러개의 벡터를 얻을 수 있겠죠. 바로 이것이 Multi-Head 어텐션 입니다. 
+
+예를 들어, 우리가 한명의 전문가에게 내가 커리어 조언을 받는다면 우리는 그 전문가의 말대로 따를 수 밖에 없을 것 입니다. 하지만 여러 유능한 전문가에게 각각 커리어 조언을 받는다면, 그 전문가가 경험해온 업력에따라 조금씩 다른 조언을 받을 수 있겠죠. Multi-head Attention이 추구하는 바가 바로 이것입니다.
+
+여러 Head를 통해 여러개의 결과 vector를 생성한 다음, 그 vector들을 모두 더해 결국 최종적으로 하나의 Embedding Vector로 변환하여, 문장 내에서 관계성을 잘 파악하도록 합니다.
+
+이렇게 생성된 벡터들은 이제 서로간의 관계성을 가진 채로 Add & Norm Layer에서 잔차 연결(Residual Connection)을 통해 입력값을 그대로 더해주면서 기울기가 소실되는 것을 방지하고, Normalization을 통해서 학습이 불안정 해지는 것을 방지합니다.
+
+# Feed Forward(Encoder)
+![출처: Attention Is All You Need 논문 중 발췌한 사진을 Excalidraw로 일부 편집 self made](/images/content/transformer/ffn.png)
+
+방금 전 Multi-Head Attention Layer를 지난 벡터들은 이제 상호 간의 관계성, 즉, 문맥 정보를 포함하도록 변경되었습니다. 하지만 이 과정에서 본래 자신의 진짜 의미를 조금 손실했을 가능성이 있습니다. 즉, I가 love와 you에 정보를 담다보니 본래 I 라는 정보가 조금 흐릿해진 상황입니다.
+
+따라서 우리는 이것을 방지하기 위해서 토큰들이 서로 영향을 주지 않는 선에서 조금 더 비선형적으로 학습해 관계성을 잃지 않으면서 본래 자신의 정보를 조금더 표현하도록 해야합니다. 이를 위해 벡터의 차원을 확대했다가 비선형적으로 변경후 다시 원래 크기로 돌아오는 방식을 취합니다.
+
+Feed Forwar Layer 역시 생성된 벡터들이 Add & Norm Layer를 거쳐 학습의 안정성을 계속해서 유지합니다.
+
+이렇게 Encoder의 전체적인 구조가 구성되며, Encoder는 최종적으로 위치 정보, 문맥 정보를 포함하고 있는 완벽한 벡터를 출력합니다.
+
+# Output Embedding & Positional Encoding
+![출처: Attention Is All You Need 논문 중 발췌한 사진을 Excalidraw로 일부 편집 self made](/images/content/transformer/output-embed.png)
+
+Decoder 입력은 Output Probabilites이 가장 높은 단어가 다음 Decoder 입력이 되는 재귀적인 구조를 가집니다. 즉, 문장의 다음 단어를 하나씩 예측하고 지금까지 예측한 문장을 이용해 다음 단어를 예측하는 구조인 것 입니다. 
+
+하지만 초기에는 아무런 단어도 예측하지 않은 상태이기 때문에, 문장의 시작을 알리는 키워드인 `<SOS>`를 사용하여 디코더 인풋으로 사용합니다.
+
+인코더와 마찬가지로, 입력된 `<SOS>` 토큰을 벡터로 변환하고 위치 정보(첫 번째 자리)를 더해줍니다.
+
+# Masked Multi-Head Attention(Decoder)
+![출처: Attention Is All You Need 논문 중 발췌한 사진을 Excalidraw로 일부 편집 self made](/images/content/transformer/masked-mh.png)
+
+Masked Multi-Head Attention Layer는 Self-Attention을 Multi-Head로 수행하는, 즉 Encoder의 Multi-Head Attention Layer와 같은 목적을 위한 Layer입니다. 디코더의 Input으로 입력된 단어들의 연관성을 파악하기 위한 Layer입니다.
+
+하지만 여기서 우리는 'Masked'라고 표현된 부분이 무엇인지 궁금합니다. 이는 바로 트랜스포머 모델의 학습 과정에서 필요한 기술인 Masking이라는 기술을 의미합니다.
+
+우리가 결과적으로 원하는 트랜스포머 모델은, 지금까지 생성된 단어들만 가지고 다음 단어를 예측하는 모델입니다. 하지만 학습 과정에서는 디코더의 입력이 정답 문장, 즉, 예측해야하는 '정답지'를 디코더의 입력으로 전달하기에 이를 학습하는 것은 단순히 모델이 지금까지의 정보 만이 아닌 예측해야하는 정보들도 Self-Attention을 진행하여 정보들이 포함되는 것이죠.
+
+따라서 이를 방지하기 위해 Masking을 적용해, 예측 단어 전까지의 정보만 보존하고 예측단어~문장끝 까지 단어들은 모두 Masking하여 정보를 무효화 시킵니다. Self-Attention에서는 Q, K 내적이후 Softmax를 진행하기 때문에 음의 무한대 값을 넣어서 무효화 시킵니다.
+
+이렇게 Masked Multi-Head Attention을 지난 디코더 인풋은 예측 단어 이전까지의 정보 관계성을 가지고 있는 벡터가 됩니다.
+
+또한 생성된 벡터들이 Add & Norm Layer를 거쳐 학습의 안정성을 계속해서 유지합니다.
+
+# Mutli-Head Attention(Decoder)
+![출처: Attention Is All You Need 논문 중 발췌한 사진을 Excalidraw로 일부 편집 self made](/images/content/transformer/mg_decoder.png)
+
+이제 제가 트랜스포머 모델에서 가장 좋아하는 Layer 입니다. 저는 처음 봤을때 정말 어떻게 이런 발상을 생각해냈을까 싶을 정도로 매우 흥미롭게 다가왔습니다.
+
+지금까지 해당 논문에서 사진의 화살표의 의미는 입력, 즉 인풋으로 전달된다는 의미라는 것을 이쯤 되면 다들 눈치채셨을 겁니다. 사진을 보면 현재 이전에 인코더에서 결과적으로 생성한 아웃풋이 현재 Layer의 인풋 두개로 들어오고 있고, 하나는 방금 Masked Multi-Head Attention을 지난 디코더의 아웃풋으로 들어오고 있습니다. 
+
+이것이 핵심입니다. 우리는 Self-Attention을 할 것인데, Q(Query)를 방금전 Decoder의 벡터 행렬로 사용하고, K(Key), V(Value)를 Encoder에서 원본 문장의 관계와 문맥을 담고있는 것으로 사용해서 관계성을 파악합니다. 
+
+우리 예제에서는 현재까지 생성된 디코더 아웃풋 `<SOS>`가 인코더 아웃풋 I와 깊은 연관성을 띈다고 판단할 것입니다. 
+
+이러한 구조를 Cross-Attention, Encoder-Decoder Attention이라고도 부릅니다.
+
+역시 생성된 벡터들이 Add & Norm Layer를 거쳐 학습의 안정성을 계속해서 유지합니다.
+
+# Feed Forward(Decoder)
+인코더와 동일한 역할을 하며, Cross-Attention을 통해 얻은 정보를 더 깊게 처리합니다.
+
+# Linear & Softmax
+![출처: Attention Is All You Need 논문 중 발췌한 사진을 Excalidraw로 일부 편집 self made](/images/content/transformer/output.png)
+최종적으로 다음에 올 단어를 예측합니다.
+
+- Linear: 디코더 블록을 통과한 최종 벡터를 한국어 단어장의 전체 단어 개수만큼의 차원으로 확장시킵니다. 각 차원은 특정 단어에 대한 '점수'를 의미합니다.
+- Softmax: 이 점수들을 0과 1 사이의 확률값으로 변환합니다. 모든 단어의 확률을 합하면 1이 됩니다.
+
+결국 이렇게 해서 가장 높은 확률값을 가진 단어, 예를 들어 '나는'이 첫 번째 번역 결과로 선택됩니다.
+
+이 과정을 종결 플래그인 `<EOF>`까지 반복하며 최종적으로 가장 높은 확률값을 가진 단어를 출력하여 '나는 너를 사랑해'라는 문장이 최종 시퀀스로 반환될 것 입니다.
+
+# 결론
+결국 트랜스포머 모델의 구조는, 입력 문장들간의 관계를 파악한 후, 출력 문장을 위해 입력 문장과 가장 관계를 이전 정보를 모두 종합해 높은 단어를 다음 단어를 선택하는 방식을 재귀적으로 반복해서 출력하는 방식이라는 것이 핵심이였습니다.
+
+이렇게 하나하나 분석하고 나서 보니까 트랜스포머 모델도 비교적 간단한 인코더-디코더 구조를 가지는 것 같습니다. 저는 특히나 크로스 어텐션 부분이 매우 매력적이였고, 그 레이어 덕분에 트랜스포머 모델이 높은 정확도를 가진다고 생각했습니다.
+
+또한 언급은안했지만 트랜스포머 모델의 대부분의 연산은 Self-Attention이기 때문에, 병렬처리가 가능해 컴퓨팅 자원을 극대화할 수 있습니다.
+
+해당 게시글을 쓰는 시점이 불가피하게 새벽시간대에 작성하느라 틀린 부분도 많고, 정신없이 작성한 부분이 매우 많다는것을 쓰는 시점에도 느낄 정도였습니다;;; 따라서 해당 게시글을 끝까지 읽어주셔서 감사하다는 말씀 드리며, 다음 게시글에선 GPT-2 구조를 분석하여 트랜스포머 모델이 어떻게 발전해나가는지 조금더 살펴보고자 합니다. 
+
+# 참고 자료
+- Attention Is All You Need - Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones, Aidan N. Gomez, Lukasz Kaiser, Illia Polosukhin | Original paper
+- [Attention/Transformer 시각화로 설명 | ImcommIT youtube channel](https://www.youtube.com/watch?v=6s69XY025MU)
+- [트랜스포머, ChatGPT가 트랜스포머로 만들어졌죠. - DL5 |
+3Blue1Brown 한국어 youtube channel](https://www.youtube.com/watch?v=g38aoGttLhI)
+- [그 이름도 유명한 어텐션, 이 영상만 보면 이해 완료! - DL6 |
+3Blue1Brown 한국어 youtube channel](https://www.youtube.com/watch?v=_Z3rXeJahMs)
+- [[딥러닝 기계 번역] Transformer: Attention Is All You Need (꼼꼼한 딥러닝 논문 리뷰와 코드 실습) | 동빈나 youtube channel](https://www.youtube.com/watch?v=AA621UofTUA)
+- [[Deep Learning 101] 트랜스포머, 스텝 바이 스텝 | 신박Ai youtube channel](https://www.youtube.com/watch?v=p216tTVxues)
+- [트랜스포머 모델이란 무엇인가요? | IBM](https://www.ibm.com/kr-ko/think/topics/transformer-model)
+- [트랜스포머 모델이란 무엇인가? (1) | NVIDIA Blog](https://blogs.nvidia.co.kr/blog/what-is-a-transformer-model/)
+- [트랜스포머 모델이란 무엇인가? (2) | NVIDIA Blog](https://blogs.nvidia.co.kr/blog/what-is-a-transformer-model-2/)
+- 의외 다수 LMM과 인터넷을 통해 학습한 자료들. 
