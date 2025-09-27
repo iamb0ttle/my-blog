@@ -186,6 +186,7 @@ The image above shows the BERT model inferring whether two sentences are connect
 A `[CLS]` token is added at the beginning of the first sentence, and a `[SEP]` token is inserted at the point where the first sentence ends and the second sentence begins, allowing BERT to distinguish between the two sentences.
 
 BERT uses Attention to determine if the two sentences are related and finally outputs whether the two sentences are connected (`IsNext`) or are separate, unrelated sentences (`IsNotNext`) based on the final output vector of the `[CLS]` token.
+In addition, for each token for NSP, we add segational Embedding to each token, Segement Embedding distinguishes the tokens by segment token when we proceed with self -attion as a token to distinguish whether each token is the first sentence or the second sentence.
 
 ## BERT Summary
 BERT actively utilized the Self-Attention of the Transformer model's encoder to leverage bidirectional context, achieving high performance in both predicting specific masked words in a sentence and predicting the relationship between two sentences.
