@@ -1,0 +1,29 @@
+{
+  "name": "my-blog (Astro)",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:1-22-bookworm",
+  "features": {
+    "ghcr.io/devcontainers/features/git:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "astro-build.astro-vscode",
+        "esbenp.prettier-vscode",
+        "bradlc.vscode-tailwindcss"
+      ],
+      "settings": {
+        "editor.formatOnSave": true
+      }
+    }
+  },
+  "forwardPorts": [4321],
+  "portsAttributes": {
+    "4321": {
+      "label": "Astro Dev Server",
+      "onAutoForward": "openPreview"
+    }
+  },
+  "postCreateCommand": "corepack enable && corepack prepare pnpm@latest --activate && pnpm install",
+  "postStartCommand": "pnpm dev --host 0.0.0.0 --port 4321",
+  "remoteUser": "node"
+}
