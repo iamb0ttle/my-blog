@@ -28,7 +28,7 @@ const allPosts = (await getCollection("blogs")).sort(sortItemsByDateDesc);
       <h1 class="sigmar-ff leading-tight text-balance sm:pt-0!">
         {siteConfig.hero?.title}
       </h1>
-      <p class="kanit-regular text-balance text-xs sm:text-base">
+      <p class="kanit-regular text-balance text-xs sm:text-base whitespace-pre-line">
         {siteConfig.hero?.text}
       </p>
       <div
