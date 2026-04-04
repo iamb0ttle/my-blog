@@ -5,8 +5,6 @@ import siteConfig from "../site.config";
 import { sortItemsByDateDesc, withBase } from "../utils/helpers";
 import PostCardPreview from "../components/PostCardPreview.astro";
 import Button from "../components/Button.astro";
-import { Image } from "astro:assets";
-import heroImage from "../assets/images/pixeltrue-space-discovery.svg";
 import ArrowRight from "../icons/ArrowRight.astro";
 
 const allPosts = (await getCollection("blogs")).sort(sortItemsByDateDesc);
@@ -14,7 +12,7 @@ const allPosts = (await getCollection("blogs")).sort(sortItemsByDateDesc);
 
 <MainLayout
   activePage="home"
-  pageTitle={siteConfig.title + " | An Astro Personal Blog Template"}
+  pageTitle={siteConfig.title}
 >
   <div
     class="jumbo-banner flex flex-col sm:flex-row sm:items-center sm:justify-between w-full px-4 my-12 gap-6"
@@ -49,13 +47,9 @@ const allPosts = (await getCollection("blogs")).sort(sortItemsByDateDesc);
       </div>
     </div>
     <div class="w-full sm:w-fit sm:max-w-1/2">
-      <!-- {siteConfig.hero?.image && <Image src={siteConfig.hero?.image?.src} alt={siteConfig.hero?.image?.alt || ""} inferSize={true} />} -->
-      <Image
-        class="cover-img"
-        src={heroImage}
-        alt={"Astronaut in space"}
-        width={400}
-        height={300}
+      <div
+        class="cover-img w-full h-[240px] sm:h-[300px] rounded-4xl border border-gray-500/40 bg-gradient-to-br from-gray-900/60 via-gray-900/20 to-gray-900/0"
+        aria-hidden="true"
       />
     </div>
   </div>

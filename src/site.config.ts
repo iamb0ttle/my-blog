@@ -42,12 +42,6 @@ export type ContactInfo = {
     }[];
 };
 
-export type Subscribe = {
-    title?: string;
-    text?: string;
-    formUrl: string;
-};
-
 export type SiteConfig = {
     website: string;
     logo?: Image;
@@ -60,7 +54,6 @@ export type SiteConfig = {
     hero?: Hero;
     about?: About;
     contactInfo?: ContactInfo;
-    subscribe?: Subscribe;
     blog?: Blog;
     postsPerPage?: number;
     recentPostLimit: number;
@@ -69,12 +62,8 @@ export type SiteConfig = {
 
 const siteConfig: SiteConfig = {
     website: 'https://example.com',
-    title: 'Space Ahead',
-    description: 'A minimal space-inspired personal blog template built with Astro.js and Tailwind CSS, by Siddhesh Thadeshwar',
-    image: {
-        src: '/space-ahead-preview.jpeg',
-        alt: 'Space Ahead ✨ - A minimal space-inspired personal blog template, created by Siddhesh Thadeshwar.'
-    },
+    title: 'My Blog',
+    description: '개인 블로그',
     headerNavLinks: [
         {
             text: 'Home',
@@ -107,81 +96,56 @@ const siteConfig: SiteConfig = {
             href: withBase('/contact')
         },
         {
-            text: 'RSS Feed',
-            href: withBase('/rss.xml')
-        },
-                {
             text: 'Sitemap',
             href: withBase('/sitemap-index.xml')
         }
     ],
     socialLinks: [
         {
-            text: 'Dribbble',
-            href: 'https://dribbble.com/'
+            text: 'GitHub',
+            href: 'https://github.com/'
         },
         {
-            text: 'Instagram',
-            href: 'https://instagram.com/'
-        },
-        {
-            text: 'X/Twitter',
-            href: 'https://twitter.com/'
+            text: 'X',
+            href: 'https://x.com/'
         }
     ],
     hero: {
-        eyebrowText: 'Galaxy of Adventures',
-        title: 'Space Ahead ✨',
-        text: "Written by Astro-naut Sid, a space explorer at Beyond Earth.",
-        image: {
-            src: '/assets/images/pixeltrue-space-discovery.svg',
-            alt: 'A person sitting at a desk in front of a computer'
-        },
+        eyebrowText: '',
+        title: 'My Blog',
+        text: "기록을 정리하는 공간입니다.",
         actions: [
             {
-                text: 'Read Now',
+                text: 'Read',
                 href: withBase('/blog')
-            },
-            {
-                text: 'Subscribe',
-                href: '#subscribe'
             }
         ]
     },
     about: {
         title: 'About',
-        text: 'Space Ahead is a blog about space exploration and travel. It is written by Astro-naut Sid, a space explorer at Beyond Earth. Sid is known for his love of adventure and his insatiable curiosity about the universe. He has explored countless planets, discovered new life forms, and made friends with aliens along the way. 🚀',
+        text: '소개 글을 여기에 작성하세요.',
     },
     contactInfo: {
         title: 'Contact',
-        text: "Hi! Whether you have a question, a suggestion, or just want to share your thoughts, I'm all ears. Feel free to get in touch through any of the methods below:",
+        text: "연락이 필요하면 아래 정보를 사용하세요.",
         email: {
-            text: "Drop me an email and I’ll do my best to respond as soon as possible.",
+            text: "이메일",
             href: "mailto:example@example.com",
             email: "example@example.com"
         },
         socialProfiles: [
             {
-                text: "LinkedIn",
-                href: "https://www.linkedin.com/"
-            },
-            {
-                text: "Peerlist",
-                href: "https://www.peerlist.io/"
-            },
-            {
                 text: "GitHub",
                 href: "https://github.com/"
+            },
+            {
+                text: "X",
+                href: "https://x.com/"
             }
         ]
     },
-    subscribe: {
-        title: 'Subscribe to Space Ahead',
-        text: 'One update per week. All the latest stories in your inbox.',
-        formUrl: '#'
-    },
     blog: {
-        description: "Read about my space adventures, explorations and the aliens I've met on my journeys."
+        description: "전체 글 목록입니다."
     },
     postsPerPage: 2,
     recentPostLimit: 3

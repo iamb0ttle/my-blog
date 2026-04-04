@@ -6,7 +6,7 @@
   },
   "include": [
     "src/**/*",
-    "env.d.ts",
+    "src/env.d.ts",
     ".astro/types.d.ts"
   ],
   "exclude": [

@@ -6,9 +6,11 @@ import swup from "@swup/astro";
 import tailwindcss from "@tailwindcss/vite";
 
 // https://astro.build/config
+const isDev = process.env.NODE_ENV !== "production";
+
 export default defineConfig({
-  site: "https://djsiddz.github.io",
-  base: "/space-ahead",
+  site: process.env.SITE_URL ?? (isDev ? "http://localhost:4321" : "https://example.com"),
+  base: process.env.BASE_PATH ?? "/",
   integrations: [
     swup({
       theme: ["overlay", { direction: "to-top" }],

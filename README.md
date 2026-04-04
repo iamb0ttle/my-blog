@@ -1,105 +1,46 @@
-# Space Ahead ✨ - An Astro v6 Personal Blog Template
+# My Blog
 
-A minimal space-inspired personal blog template, created by Siddhesh Thadeshwar.
+개인 블로그 프로젝트입니다. Astro 기반의 SSG로 글은 Content Collections를 통해 관리합니다.
 
-> ## Now ready for Astro v6. 🥳
+## 개발/실행
 
-![Space Ahead ✨](/space-ahead-preview.jpeg)
-
-See the [demo](https://djsiddz.github.io/space-ahead) to know more. | View on Astro's [Theme Directory](https://astro.build/themes/details/space-ahead/).
-
-## 🆕 Real-like Demo
-
-View **Mumbai Stories** - [Samay Anand's Blog](https://djsiddz.github.io/samay-anand)! 🏏 |  [View Source Code](https://github.com/djsiddz/samay-anand).
-
-## Theme Features
-
-- ✅ Tailwind CSS
-- ✅ Mobile-first responsive layout
-- ✅ Dark and light color mode
-- ✅ Custom About, Contact & 404 pages
-- ✅ Hero section with short bio
-- ✅ Blog content collection
-- ✅ Pagination support
-- ✅ Tags support for blog posts
-- ✅ Subscription form (only UI)
-- ✅ View transitions (via swup.js)
-- ✅ Sitemap support
-- ✅ RSS Feed support
-- ✅ Markdown support
-
-### Future Scope (Based on requests)
-
-- ⏹️ MDX support via @astrojs/mdx integration
-- ⏹️ SEO-friendly with canonical URLs and OpenGraph data
-- ⏹️ New Portfolio/Projects content collection
-
-## Template Integrations
-
-- Tailwind v4 via Vite Plugin as per latest Astro docs
-- Swup.js for View Transitions
-- RSS: [@astrojs/rss](https://docs.astro.build/en/guides/rss/)
-- Sitemap: [@astrojs/sitemap](https://docs.astro.build/en/guides/integrations-guide/sitemap/)
-
-## How to use this template
-
-### Getting Started
-
-1. [Create a new repo](https://github.com/new?template_name=space-ahead&template_owner=djsiddz) using this template.
-2. Clone to repo to your local computer using `git clone <your-repo-url>`. Then `cd <your-repo-name>`.
-3. Setup `pnpm` and use `pnpm install` and then `pnpm dev`.
-4. Use the `astro.config.mjs` and `src/site.config.ts` files to setup the template to your liking.
-5. Update any content on homepage (`src/pages/index.astro`), about (`src/pages/about.astro`), and contact (`src/pages/contact.astro`).
-6. Replace the template posts under (`src/content/blogs/*.md`) with your blog posts, using the same format, with the post metadata.
-7. Check the [Astro Deployment guide](https://docs.astro.build/en/guides/deploy/) to know specific steps on deploying this on your preferred provider platform.
-
-### Project Structure
-
-You'll see the following folders and files:
-
-```text
-├── public/----------------- Contains the site logo (replace with your own).
-├── src/--------------------
-│   ├── assets/------------- Contains svg icons for theme toggle component.
-│   │   └── images/--------- Contains default images for homepage and blog posts.
-│   ├── components/--------- All Astro/Preact components in this theme.
-│   ├── content/------------ Content Collections folder.
-│   │   └── blogs/---------- All the blog posts in *.md files.
-│   ├── icons/-------------- All Astro icon components.
-│   ├── layouts/------------ Shared Layout component.
-│   ├── pages/-------------- Various Astro pages, dynamic pages for blogs, tags; a custom 404 page.
-│   ├── styles/------------- Contains `global.css`, `fonts.css` and `animate.css`.
-│   ├── utils/-------------- Contains helper functions.
-│   ├── content.config.ts--- Content collections definitions.
-│   ├── env.d.ts------------ Contains helper functions.
-│   └── site.config.ts------ Manage your site information and content here.
-├── astro.config.mjs-------- Astro configuration file.
-├── changelog.md------------ Detailed Changelog for this theme.
-├── LICENSE----------------- Theme License.
-├── package.json------------ Dependencies and metadata about this template.
-├── README.md--------------- 📍 You are here.
-└── tsconfig.json----------- Typescript configuration file.
+```bash
+pnpm install
+pnpm dev
 ```
 
-#### Notes
+## 빌드/프리뷰
 
-- Read & consult [Astro's documentation](https://docs.astro.build/) for up-to-date information and making changes to this template.
-- The `src/components` directory is where we like to put any Astro or Preact components.
-- The `src/content/` directory contains "collections" of related Markdown (and MDX) documents. Use getCollection() to retrieve posts from `src/content/blogs/`, and type-check your frontmatter using an optional schema. See Astro's [Content Collections](https://docs.astro.build/en/guides/content-collections/) docs to learn more.
+```bash
+pnpm build
+pnpm preview
+```
 
-## Credits and Support Info
+## 글 작성
 
-### Support Info
+- 새 글 추가: `src/content/blogs/` 아래에 `*.md` 파일 추가
+- 메타데이터(frontmatter): `src/content.config.ts` 스키마를 따름
 
-- I provide **paid service** for customizing and setup any of my Astro templates for your projects and startups. Contact me on [Contra](https://contra.com/siddhesht/services) to know more.
-- Please feel free to create issues for any bugs or feature requests for this theme.
+## 주요 설정 파일
 
-### Credits
+- 사이트 설정(제목/설명/네비 등): `src/site.config.ts`
+- Astro 설정(사이트 URL 등): `astro.config.mjs`
 
-- Generated Space Ahead ✨ logo and images for demo blog content using Microsoft Designer.
-- Homepage illustration by [Pixeltrue Ouch!](https://icons8.com/illustrations/author/ARh4OKrFtdfC)
-- Inspired from these amazing Astro templates - [Dante](https://github.com/JustGoodUI/dante-astro-theme) & [Chiri](https://github.com/the3ash/astro-chiri). Please do check them out.
+## 프로젝트 구조(요약)
 
-## License
+```text
+public/                정적 파일
+src/content/blogs/      블로그 글(마크다운)
+src/pages/              라우팅(페이지)
+src/components/         UI 컴포넌트
+src/layouts/            레이아웃
+src/styles/             전역 스타일
+```
 
-[GNU GPL v3](/LICENSE)
+## 출처
+
+이 프로젝트는 Astro 테마인 **Space Ahead**를 기반으로 시작했습니다: `https://github.com/djsiddz/space-ahead`
+
+## 라이선스
+
+`LICENSE` 참고 (GNU GPL v3).
