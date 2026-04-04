@@ -1,16 +1,21 @@
 import { type CollectionEntry } from 'astro:content';
 
 export function sortItemsByDateDesc(itemA: CollectionEntry<'blogs'>, itemB: CollectionEntry<'blogs'>) {
-    return new Date(itemB.data.pubDate).getTime() - new Date(itemA.data.pubDate).getTime();
+    return getPostDate(itemB).getTime() - getPostDate(itemA).getTime();
 }
 
 export function createSlugFromTitle(title: string): string {
-    return title
+    const normalized = title
+        .normalize('NFKC')
         .toLowerCase()
-        .replace(/[^a-z0-9\s-]/g, '') // Remove special characters
         .trim()
-        .replace(/\s+/g, '-') // Replace spaces with hyphens
-        .replace(/-+/g, '-'); // Replace multiple hyphens with a single hyphen
+        .replace(/[’'"]/g, '')
+        .replace(/[^\p{Letter}\p{Number}\s-]/gu, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-')
+        .replace(/^-+|-+$/g, '');
+
+    return normalized || 'tag';
 }
 
 export function getAllTags(posts: CollectionEntry<'blogs'>[]) {
@@ -30,6 +35,20 @@ export function getAllTags(posts: CollectionEntry<'blogs'>[]) {
 export function getPostsByTag(posts: CollectionEntry<'blogs'>[], tagId: string) {
     const filteredPosts: CollectionEntry<'blogs'>[] = posts.filter((post) => (post.data.tags || []).map((tag) => createSlugFromTitle(tag)).includes(tagId));
     return filteredPosts;
+}
+
+export function getPostDate(post: CollectionEntry<'blogs'>) {
+    const rawDate = post.data.pubDate ?? post.data.date;
+    if (!rawDate) return new Date(0);
+    return rawDate instanceof Date ? rawDate : new Date(rawDate);
+}
+
+export function getPostDescription(post: CollectionEntry<'blogs'>) {
+    return post.data.description ?? post.data.excerpt ?? "";
+}
+
+export function getPostImage(post: CollectionEntry<'blogs'>) {
+    return post.data.image ?? post.data.featuredImage ?? "";
 }
 
 export const withBase = (path: string) => {

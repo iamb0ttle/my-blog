@@ -61,7 +61,7 @@ export type SiteConfig = {
 };
 
 const siteConfig: SiteConfig = {
-  website: "https://example.com",
+  website: "https://iamb0ttle.github.io/my-blog/",
   title: "Byeonghyun Na's Blog",
   description: "나병현의 개인 블로그",
   headerNavLinks: [
@@ -84,6 +84,10 @@ const siteConfig: SiteConfig = {
     eyebrowText: "나병현의 생각을 들여다 보기 👀",
     title: "Welcome!",
     text: "나병현의 블로그에 오신걸 \n 환영합니다. 자유롭게 살펴보세요 🥳",
+    image: {
+      src: withBase("/images/hero/hero.jpg"),
+      alt: "Home hero image",
+    },
     actions: [
       {
         text: "Read",
@@ -111,7 +115,7 @@ const siteConfig: SiteConfig = {
   blog: {
     description: "전체 글 목록입니다.",
   },
-  postsPerPage: 2,
+  postsPerPage: 5,
   recentPostLimit: 3,
 };
 

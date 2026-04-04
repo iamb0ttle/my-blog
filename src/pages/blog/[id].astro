@@ -1,9 +1,10 @@
 ---
 import "../../styles/global.css";
-import { Image } from "astro:assets";
 import {
   sortItemsByDateDesc,
   createSlugFromTitle,
+  getPostDate,
+  getPostImage,
   withBase,
 } from "../../utils/helpers";
 import { type CollectionEntry, getCollection, render } from "astro:content";
@@ -33,7 +34,10 @@ type Props = {
 };
 
 const { post, prevPost, nextPost } = Astro.props;
-const { title, pubDate, author, tags = [], image } = post.data;
+const { title, author, tags = [] } = post.data;
+const displayAuthor = author || "🙂";
+const pubDate = getPostDate(post);
+const image = getPostImage(post);
 const { Content } = await render(post);
 ---
 
@@ -41,13 +45,11 @@ const { Content } = await render(post);
   <div class="page-content">
     <h1 class="sigmar-ff text-center text-balance">{title}</h1>
     <p class="leading-8 text-center kanit-regular text-balance text-xs">
-      by 🧑‍🚀 <span class="kanit-bold">{author}</span> on <span class="kanit-bold"
-        >{new Date(pubDate).toDateString()}</span
-      >
+      by <span class="kanit-bold">{displayAuthor}</span> on <span class="kanit-bold">{pubDate.toDateString()}</span>
     </p>
     {
-      image && image.url && (
-        <Image class="mb-8 my-6" src={image?.url} alt={image?.alt || ""} />
+      image && (
+        <img class="mb-8 my-6 rounded-xl" src={image} alt={title || ""} />
       )
     }
     <div class="font-light text-left">

@@ -1,0 +1,95 @@
+---
+title: "RAG(Retrieval-Augmented Generation)는 내 LEG(Logical Enhanced Generation) 위에"
+description: "당신의 LLM이 하체 운동(기초 지식 강화)을 거르게 두지 마세요."
+pubDate: "2025-12-14"
+author: "병현"
+tags: ["NLP", "AI", "Transformer", "BART", "RAG", "ODQA", "KIT"]
+image: "https://miro.medium.com/0*IsN-x4wW8Ava37CW.jpg"
+---
+
+# Overview
+
+해당글은 작성 시점을 기준으로 2025년 12월 13일(KST)에 작성되고 있다. 2025년을 시작한게 어제 같은데 벌써 연말이 되었다. 2025년 한해 동안 정말로 많은일이 있었는데, 그 중 사람들이 모두 동의할만한 주제를 뽑자면 바로 AI 일것이다. AI는 이제 대중이 인식할 만큼 코앞으로 다가왔고, 내가 재학중인 학교 기숙사 사감선생님도 ChatGPT, Gemini, Claude, Perplexity 등 여러가지 AI를 스마트폰에서 사용한다고 하시니 이제 정말 모든 사람이 AI를 사용하는 것 같다.
+
+많은 분야의 인공지능 기술들이 발전했지만, 결국 올해도 Transformer 기반의 LLM(Large Language Model)이 대세였다. 현재 Silicon Valley 에서는 많은 AI 스타트업이 출현하고 있는데, 사실은 대부분이 LLM API를 호출하는 시스템이 아니냐는 의심의 목소리도 나오기도 한다. 어쨌든 LLM이 이렇게 2019년에 등장하고 지금까지도 인공지능의 가장 화제이고, LLM으로 AGI를 달성하냐마냐 하는 시점인 지금 LLM이 대단한 기술인건 인정할 수 밖에 없는 사실이다.
+
+또한 대부분의 LLM 서비스는 이제 외부 데이터를 손쉽게 가져올 수 있도록 설계되어있다. 예를 들어, 사내 Database에 문서를 가져와 LLM이 데이터를 통해 응답을 생성하는데 이용한다던지, 사용자의 질문과 가장 연관있는 뉴스데이터들을 몇개 가져온다던지. 이런 기술들은 이제 대부분의 LLM 서비스에서 제공한다.
+
+하지만 이러한 기술은 모두 **RAG(Retrieval-Augmented Generation)** 라고 하는 기술이 기반이 되어 가능한 것들이다. RAG는 LLM이 학습시점에 학습하지 못한 데이터(학습 시점 이후, 라이브 데이터, 도메인 지식 등)를 토큰 생성시점에 알 수 있도록 데이터를 검색해서 토큰 생성을 '증강' 할 수 있도록 한다.
+
+따라서 오늘은 이러한 RAG가 등장한 첫 논문을 바탕으로 RAG의 그 기초적인 원리는 무엇이고, 근본은 무엇인지에 대해서 살펴보려고 한다.
+
+# RAG's Background: 왜 RAG가 필요했는가?
+
+먼저 RAG라는 기술이 왜 등장하였는지부터 그 배경에 대해 알아보자.
+
+2017년 Attention-Is-All-You-Need 논문에서 Transformer 아키텍처가 제안되고 나서, 2019년 Transformer Decoder base 모델인 GPT-2의 등장으로 CLM 모델이 방대한 양의 정보를 파라미터로 학습하여 Fine-Tuning 없이 사전학습된 모델 많으로도 보다 많은 Tasks를 수행할 수 있다는 것이 학계에 알려졌다.
+
+하지만, 이러한 사전학습된 언어모델에는 여전히 한계가 존재했다. 바로 **'외부 데이터의 부재'** 이다. 언어 모델은 학습 시점의 데이터를 깊게 학습한다. 때문에 학습이 끝난 이후에 새로운 데이터나, 학습 데이터에 포함될 수 없던 Generic 하지 않은 Specific 한 데이터에 대해서는 알 수 없고, 환각(Hallucination) 현상을 보일 수 있다. 이러한 외부 데이터의 부재는 외부데이터를 필요로하는 tasks에서 critical 하게 작용했다.
+
+이러한 언어모델의 외부 데이터의 부재 문제를 해결하기 위해 많은 방법론들이 등장했다. **ODQA(Open-Domain Question-Answering)** 이라는 광범위한 Domain 코퍼스로부터 질문에 대한 연관 코퍼스를 검색하여 답변을 생성하는 task를 달성하기 위해 ORQA, REALM 같은 모델들이 등장했다.
+
+하지만 ORQA, REALM 같은 모델들은 Encoder-Only 구조 모델들이였기 때문에 '생성'하는 작업을 수행하기 어려워했고, 학습 데이터를 문서 데이터로 부터 생성(ICT, Inverse-Cloze-Task) 하는 접근법은 과연 '문서의 문장이 질문을 대변할 수 있는가'에 대한 의문을 해소하지 못했다.
+
+이러한 시점에서 RAG는 parmetic한 정보뿐만이 아닌 non-prametic한 정보를 언어모델, 특히 생성형 언어모델이 인지하고 답변에 포함할 수 있도록 방법론을 제시하며 등장하게 되었다. 또한 생성형 언어모델에 검색 모델을 통합하여 task-specific retreive-and-extract 구조를 능가하여 이제 언어모델이 외부 데이터를 필요로 하는 여러 Task에서도 해당 기술을 통해 더욱 우위를 점할 수 있다는 사실을 증명했다.
+
+# RAG Architecture
+
+RAG는 Retriever 컴포넌트와 Generator 컴포넌트를 가지는 구조이다. Retriever 컴포넌트에서 정보를 찾기 위한 문서를 검색해와 문서를 원래 입력값(x)와 concat한 후 Generator에서 문서 + 입력을 통해 올바른 출력을 생성해낸다.
+
+조금더 자세히 살펴보기 위해 원본 논문의 Figure를 살펴보며 같이 설명하겠다.
+
+![출처: 논문 Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks Figure 1](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FcHFRMC%2FbtsEyctzN6a%2FAAAAAAAAAAAAAAAAAAAAAPTLc4mC_zsJRP9nw7wuXhytL3LZDStU_e4IYgvgo0ZM%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1767193199%26allow_ip%3D%26allow_referer%3D%26signature%3DdS8O8g7VWzWvoH7jKb4v6QJAimw%253D)
+
+### Retriever
+
+Retriever의 경우 사용자의 입력값($x$)를 기반으로 문서를 검색하는 component이다. 원본 논문에서는 해당 Retriever component를 **DPR based의 Bi-Encoder**로 구성했다.
+
+**DPR(Dense Passage Retrieval)** 은 Dense 하게 Vector를 Search 하는 모델으로 좋은 성능을 낸다. Sparse 한 방식으로 Retriever을 수행하는 BM25, TF-IDF 등 보다 성능이 좋으며, ODQA에서도 ORQA, REALM보다 좋은 벤치마크 성능을 보였다.
+
+![출처: 자체 제작 by Excalidraw](/images/content/rag/dpr-structure.png)
+
+위 사진은 DPR의 Bi-Encoder 구조를 도식화한 그림이다. Bi-Encoder는 사진과 같이 두개의 BERT 모델을 사용한다. 한개의 BERT는 입력(input(x))에 대해 Self-Attention을 통해 Dense Vector를 생성하는데 사용된다. 다른 하나의 BERT는 외부 문서(z)에 대해 Self-Attention을 통해 Dense Vector를 생성해낸다. 이후 생성된 각각의 Dense Vector들을 내적 연산하여 Score 가 높은 Top-K개의 문서를 선택한다.
+
+이 때 내적 연산이 아닌 코사인 유사도나 L2 기반의 유사성 판단을 수행할 수 있지만, 성능이 비슷하므로 간단한 내적(Dot) 연산을 사용했다고 한다.
+
+이렇게 선정된 Top-K개의 문서는 입력과 Concat되어 다음 Generator Component로 전달된다.
+
+### Generator
+
+Generator는 Parametic한 정보를 가지고 있는 언어모델로, 응답을 생성하기 위한 component이다. Retrieval Component에서 선정된 Top-K의 문서가 원본 입력(x)과 함께 Concat 되었기 때문에 언어모델의 입력으로 들어가면 언어모델이 정보를 참고하고 non-parametic한 정보를 받아들임으로써 잘못된 정보나 Specific한 정보를 이용해 토큰 생성을 수행할 수 있게 된다.
+
+원본 논문에서는 Generator로 사전 학습된 Seq2Seq based transformer인 BART-large 모델을 사용하여 학습 및 추론을 수행했다.
+
+해당 논문에서는 Generator를 Modeling할 수 있는 두가지 방법론에 대해서 설명하고 있다.
+
+- **RAG-Sequence**: Generator로 토큰을 생성할때, 한가지 문서만을 참고하는 방법이다. 문서를 선택한 이후에는 해당 문장의 마지막 토큰 생성 시점까지 다른 문서를 참고하지 않으며 선택된 문서만의 정보를 참고한다.
+- **RAG-Token**: Generator로 토큰을 생성할때, 각 토큰 생성 시점마다 가장 적합한 문서를 참고하는 방법이다. 현재 토큰을 생성하기 위해 가장 참고하기 좋은 문서가 무엇인지 적합도를 판단하여 모든 문서를 비교해 선택된 문서의 정보를 바탕으로 토큰을 생성한다.
+
+각 방식의 따라 trade-off가 존재하기에 이를 고려하고 modeling 해야할 것이다.
+
+# Conclusion
+
+이번 article에서는 이렇게 아주 간단하게 RAG의 등장 배경과 RAG의 원본 논문에서 소개된 Architecture에 대해서 알아보았다. 2025년 기준 현대 대부분의 RAG는 해당 논문에서 소개된 RAG를 바탕으로 성장하였다. 실제로 해당 논문은 인용횟수가 약 400회가 넘을 정도로 언어 모델이 외부 데이터를 참고하는 방식을 획기적으로 변화시킨 기념비적인 모델이라고 할 수 있다.
+
+현대 대부분의 RAG는 Frozen-RAG 즉, 학습없이 존재하는 데이터로만 수행하는 RAG인데, 이는 언어모델의 성능이 발전함에 따라 적당한 수준의 RAG 만으로도 문서가 적절한 정보를 참고할 수 있도록 패러다임이 변화했기 때문인데, 추후에 이를 다뤄봐도 좋을 것 같다.
+
+개인적인 이야기이지만, 이번 Article에서 소개한 논문 'Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks'를 기점으로 아마 필자가 읽는 2025년의 마지막 논문이 될 것 같다. 올해를 생각해보면 Attention-Is-All-You-Need를 시작으로 GPT-2, BERT, DPR, RAG, MoR(Mixture-of-Recursion) 등 10개 정도 되는 논문을 읽었다. 필자가 올해 초에 논문이 정확히 무엇인지도 몰랐던것을 감안하면 의미있는 발전이 아닌가 싶다.
+
+하지만 앞으로 필자는 논문을 읽는 방법의 새로운 패러다임을 부여하고자 한다. 내가 논문을 지금껏 읽는 방식은 논문원본을 LLM을 이용해 한번 요약하고, 해당 논문을 요약하거나 리뷰한 블로그나 유튜브를 찾아보는 방식이였다. 필자는 고등학생이고, 영어에 능숙하지 않기 때문이라는 핑계로 지금껏 이런 방식으로 논문을 접해왔는데, 이제는 바뀔때가 된것 같다.
+
+물론 이미 논문을 정리한 글들이 좋지 않은 것은 아니다. 그들은 훌륭한 先生이 되어주었다. 하지만 나의 보다 깊이있고 영감있는 학습을 위해서는 이제 나혼자 스스로의 힘으로라도 논문을 읽어야할 것이다. 영어가 어렵더라고 번역기로 한단어 한단어 번역해서라도 읽겠다. 이는 원래 그렇게 했어야한다고 생각한다. 마치 책을 읽을때 책 리뷰 유튜브 영상을 보고 책을 다 읽었다는 것처럼 행동하기 싫다.
+
+아마 다음 글부터는 글의 퀄리티가 2배가 되서 오지 않을까 싶다 🤗
+
+# Refrence
+
+- [[논문리뷰] Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks |
+  JiYeop Kim ](https://kimjy99.github.io/%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0/rag/)
+- [RAG: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks | Original paper](https://arxiv.org/abs/2005.11401)
+- [[논문 리뷰] Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks | Everyday Log blog](https://everyday-log.tistory.com/entry/%EB%85%BC%EB%AC%B8-%EB%A6%AC%EB%B7%B0-Retrieval-Augmented-Generation-for-Knowledge-Intensive-NLP-Tasks)
+- [[논문 리뷰] Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks | 길바닥AI](https://gbdai.tistory.com/67)
+- [Dense Passage Retrieval for Open-Domain Question Answering| Original paper](https://arxiv.org/abs/2004.04906)
+- [논문 리뷰) DPR : Dense Passage Retrieval for Open-Domain Question Answering | Introduce AI blog](https://introduce-ai.tistory.com/entry/%EB%85%BC%EB%AC%B8-%EB%A6%AC%EB%B7%B0-DPR-Dense-Passage-Retrieval-for-Open-Domain-Question-Answering)
+- [6기 논문 리뷰 📎 RAG(2021.04): Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks | 최민지님](https://youtu.be/TrlEMPyPtkE?si=kJnkN10QD_VGC0YZ)
+- [[Paper Review] Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks (RAG) | 김재희님](https://youtu.be/gtOdvAQk6YU?si=DyAT02skZCSEYjrL)

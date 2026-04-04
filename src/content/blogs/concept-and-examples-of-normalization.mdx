@@ -1,0 +1,253 @@
+---
+title: "정규화의 개념과 예시"
+description: "데이터베이스 정규화(Database Concept) 예시를 통한 이해"
+pubDate: "2025-05-17"
+author: "병현"
+tags: ["데이터베이스","DB","RDB","정규화"]
+---
+
+# 개요
+*이 문서는 데이터베이스 정규화에 대한 개념과 예시를 함께 정리하여 빠르게 복습하고 이해를 돕기 위한 자료입니다.*
+
+
+# 서론
+정규화는 관계형 데이터베이스 시스템의 핵심 개념 중 하나로, 관계형 데이터베이스에서 발생할 수 있는 **이상 현상(Anomalies)** 을 해결하기 위한 기법입니다.
+
+정규화는 관계형 데이터베이스의 이론적 기초를 세운 컴퓨터 과학자 **에드거 F. 코드(Dr. Edgar F. Codd)** 가 처음 제안했습니다. 그는 1970년에 _“A Relational Model of Data for Large Shared Data Banks”_ 라는 논문에서 관계형 데이터베이스 개념을 소개하고, 그 안에서 발생할 수 있는 데이터 이상 현상 문제를 지적했습니다.
+
+이 문제를 해결하기 위해 코드 박사는 **데이터 정규화** 개념을 제시하며, 제1정규형(1NF), 제2정규형(2NF), 제3정규형(3NF)을 정의했습니다. 이후 **레이몬드 F. 보이스(Raymond F. Boyce)** 와 **론 파긴(Ron Fagin)** 등 다른 연구자들이 **보이스-코드 정규형(BCNF)**, **제4정규형(4NF)**, **제5정규형(5NF)** 을 확장하여 제안했습니다.
+
+따라서, 정규화는 관계형 데이터베이스에서 데이터 이상 현상을 해결하기 위해 반드시 알아야 할 개념입니다. 이 문서에서는 이해를 돕기 위해 간단한 예시와 함께 정리했습니다.
+
+
+# 정규화란?
+**정규화**란 관계형 데이터베이스의 테이블을 **데이터 중복을 최소화**하고 **데이터 무결성을 보장**하며, 잠재적인 데이터 이상 현상을 해결할 수 있도록 구조화하는 과정입니다.  
+주요 목적은 문제를 사전에 방지하고 유지보수와 논리적 구조가 용이한 데이터베이스를 만드는 것입니다.
+
+![출처: Database Normalization and Normal Forms with an Example, Can Güney Aksakalli, 2012년 3월 12일, https://aksakalli.github.io/2012/03/12/database-normalization-and-normal-forms-with-an-example.html](https://aksakalli.github.io/images/db-norm/levels-of-normalization.svg)
+
+정규화는 **1NF, 2NF, 3NF, BCNF, 4NF, 5NF** 단계로 나누어지며, 각 단계마다 테이블에서 발생할 수 있는 문제를 점진적으로 줄여나갑니다. 각 수준은 더 엄격한 구조적 규칙을 적용하며, 그 결과 더 일관성과 신뢰성이 높은 스키마를 얻게 됩니다.
+
+중요한 점은, 특정 정규형을 만족하려면 **이전 단계의 모든 정규형 조건도 충족해야 한다**는 것입니다.
+
+
+# 1정규형(1NF)
+1NF는 모든 컬럼이 **원자값(Atomic value)** 을 가져야 한다는 조건을 만족해야 합니다. 즉, 각 행과 열이 만나는 셀에는 더 이상 나눌 수 없는 값이 들어가야 합니다.
+
+### 예시
+
+**정규화 전 🟥**
+
+|student_number (PK)|name|age|phone_number|
+|---|---|---|---|
+|110457|Jacob|17|010-1234-5678, 010-2234-5643|
+|110458|Allen|18|010-1830-0003|
+
+`phone_number` 컬럼에 한 셀에 여러 값이 들어 있어 1NF를 위반합니다. 이를 만족시키기 위해 다음과 같이 분리합니다.
+
+**정규화 후 ✅**
+
+|student_number (PK)|name|age|phone_number|
+|---|---|---|---|
+|110457|Jacob|17|010-1234-5678|
+|110457|Jacob|17|010-2234-5643|
+|110458|Allen|18|010-1830-0003|
+
+이제 1NF 조건을 만족하지만, `student_number` 기본키의 유일성이 깨집니다. 이를 해결하기 위해 전화번호를 별도의 테이블로 분리합니다.
+
+|student_number (PK)|name|age|
+|---|---|---|
+|110457|Jacob|17|
+|110458|Allen|18|
+
+|student_phone_number_id (PK)|student_number (FK)|phone_number|
+|---|---|---|
+|1|110457|010-1234-5678|
+|2|110457|010-2234-5643|
+|3|110458|010-1830-0003|
+
+
+# 2정규형(2NF)
+2NF 조건:
+- 1NF를 만족해야 함
+- 모든 비키(non-key) 속성이 **기본키 전체에 완전 함수 종속**되어야 함
+
+### 예시
+
+**정규화 전 🟥**
+
+|student_id (PK)|subject_id (PK)|subject_name|
+|---|---|---|
+|1001|CS101|Computer Science|
+
+복합키 `(student_id, subject_id)`가 기본키이지만, `subject_name`은 `subject_id`에만 종속되어 있습니다. 따라서 분리합니다.
+
+**정규화 후 ✅**
+
+|student_id (PK)|subject_id (PK, FK)|attendance_rate|
+|---|---|---|
+|1001|CS101|75%|
+|1001|CS102|63%|
+|1002|CS101|88%|
+
+|subject_id (PK)|subject_name|
+|---|---|
+|CS101|Computer Science|
+|CS102|Database|
+
+`attendance_rate`는 `student_id`와 `subject_id` 두 컬럼 모두에 의존하므로 그대로 두고, `subject_name`은 별도 테이블로 옮깁니다.
+
+
+# 3정규형(3NF)
+3NF 조건:
+- 2NF를 만족해야 함
+- **이행적 종속(Transitive Dependency)** 이 없어야 함
+
+### 예시
+
+**정규화 전 🟥**
+
+|student_id (PK)|student_name|department_id|department_name|
+|---|---|---|---|
+|1001|Topuria|D01|Department of Computer Engineering|
+|1002|Haerin|D02|Department of Administration|
+
+`department_name`은 `department_id`에 종속되고, `department_id`는 `student_id`에 종속됩니다.  
+즉, `student_id → department_id → department_name` 이행 종속이 발생합니다.
+
+**정규화 후 ✅**
+
+| student_id (PK) | student_name | department_id (FK) |
+| --------------- | ------------ | ------------------ |
+| 1001            | Topuria      | D01                |
+| 1002            | Haerin       | D02                |
+
+|department_id (PK)|department_name|
+|---|---|
+|D01|Department of Computer Engineering|
+|D02|Department of Administration|
+
+```mermaid
+erDiagram
+    STUDENT {
+        int student_id PK
+        string student_name
+        string department_id FK
+    }
+
+    DEPARTMENT {
+        string department_id PK
+        string department_name
+    }
+
+    STUDENT ||--|{ DEPARTMENT : belongs_to
+````
+
+# BCNF(보이스-코드 정규형)
+
+BCNF 조건:
+
+* 3NF를 만족해야 함
+* 모든 결정자(Determinant)가 후보키여야 함
+
+### 예시
+
+**정규화 전 🟥**
+
+| student\_id(PK) | subject\_name    | professor |
+| --------------- | ---------------- | --------- |
+| 1001            | Computer Science | Kim       |
+| 1002            | Data Structure   | Lee       |
+| 1001            | Data Structure   | Lee       |
+
+`subject_name`이 `professor`를 결정하지만 `subject_name`은 후보키가 아니므로 BCNF 위반입니다.
+
+**정규화 후 ✅**
+
+| student\_id(PK) | subject\_name(FK) |
+| --------------- | ----------------- |
+| 1001            | Computer Science  |
+| 1001            | Data Structure    |
+| 1002            | Data Structure    |
+
+| subject\_name(PK) | professor |
+| ----------------- | --------- |
+| Computer Science  | Kim       |
+| Data Structure    | Lee       |
+
+# 4정규형(4NF)
+
+4NF 조건:
+
+* BCNF를 만족해야 함
+* **비자명한 다치 종속(MVD)** 이 없어야 함
+
+### 예시
+
+**정규화 전 🟥**
+
+| student\_id | hobby   | skill  |
+| ----------- | ------- | ------ |
+| 1           | soccer  | C++    |
+| 1           | soccer  | Python |
+| 1           | reading | C++    |
+| 1           | reading | Python |
+
+`hobby`와 `skill`은 서로 독립적인 속성이므로, 모든 조합이 생성되며 중복이 발생합니다.
+
+**정규화 후 ✅**
+
+| student\_id | hobby   |
+| ----------- | ------- |
+| 1           | soccer  |
+| 1           | reading |
+
+| student\_id | skill  |
+| ----------- | ------ |
+| 1           | C++    |
+| 1           | Python |
+
+# 5정규형(5NF)
+
+5NF 조건:
+
+* 4NF를 만족해야 함
+* 데이터 손실 없이 더 작은 테이블로 분해할 수 없고, **모든 조인 종속이 후보키의 결과**여야 함
+
+### 예시
+
+**정규화 전 🟥**
+
+| Student | Language |
+| ------- | -------- |
+| Alice   | English  |
+| Alice   | French   |
+
+| Student | Certificate    |
+| ------- | -------------- |
+| Alice   | English Master |
+| Alice   | French Master  |
+
+이 두 테이블을 조인하면 원치 않는 잘못된 조합이 생깁니다.
+
+**정규화 후 ✅**
+
+| Student | Language |
+| ------- | -------- |
+| Alice   | English  |
+| Alice   | French   |
+
+| Language | Certificate    |
+| -------- | -------------- |
+| English  | English Master |
+| French   | French Master  |
+
+| Student | Certificate    |
+| ------- | -------------- |
+| Alice   | English Master |
+| Alice   | French Master  |
+
+# 마무리
+
+현업에서는 많은 개발자가 3NF에서 BCNF 사이에서 정규화를 마무리한다고 들었습니다. 따라서 BCNF 까지는 확실하게 이해해 두는 것이 중요하다고 생각합니다. 나머지 정규형은 필요할 때 다시 학습하면 됩니다.
+

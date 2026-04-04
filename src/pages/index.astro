@@ -47,10 +47,20 @@ const allPosts = (await getCollection("blogs")).sort(sortItemsByDateDesc);
       </div>
     </div>
     <div class="w-full sm:w-fit sm:max-w-1/2">
-      <div
-        class="cover-img w-full h-[240px] sm:h-[300px] rounded-4xl border border-gray-500/40 bg-gradient-to-br from-gray-900/60 via-gray-900/20 to-gray-900/0"
-        aria-hidden="true"
-      />
+      {
+        siteConfig.hero?.image ? (
+          <img
+            src={siteConfig.hero.image.src}
+            alt={siteConfig.hero.image.alt || ""}
+            class="w-full max-w-[340px] h-[220px] sm:h-[260px] object-cover rounded-3xl border border-gray-500/40 shadow-xl"
+          />
+        ) : (
+          <div
+            class="cover-img w-full h-[220px] sm:h-[260px] rounded-3xl border border-gray-500/40 bg-gradient-to-br from-gray-900/60 via-gray-900/20 to-gray-900/0"
+            aria-hidden="true"
+          />
+        )
+      }
     </div>
   </div>
   <div class="page-content">

@@ -2,7 +2,7 @@
 import { type CollectionEntry } from "astro:content";
 import ArrowRight from "../icons/ArrowRight.astro";
 import FormattedDate from "./FormattedDate.astro";
-import { withBase } from "../utils/helpers";
+import { getPostDate, getPostDescription, withBase } from "../utils/helpers";
 
 type Props = {
   post: CollectionEntry<"blogs">;
@@ -11,7 +11,9 @@ type Props = {
 };
 
 const { post, class: className, headingLevel = "h2" } = Astro.props;
-const { title, pubDate, description } = post.data;
+const { title } = post.data;
+const pubDate = getPostDate(post);
+const description = getPostDescription(post);
 const TitleTag = headingLevel;
 ---
 

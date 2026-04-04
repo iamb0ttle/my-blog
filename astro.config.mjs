@@ -1,4 +1,5 @@
 import { defineConfig } from "astro/config";
+import mdx from "@astrojs/mdx";
 import preact from "@astrojs/preact";
 import sitemap from "@astrojs/sitemap";
 import swup from "@swup/astro";
@@ -17,6 +18,7 @@ export default defineConfig({
       cache: true,
       progress: true,
     }),
+    mdx(),
     preact(),
     sitemap(),
   ],
