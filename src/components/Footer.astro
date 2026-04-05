@@ -4,9 +4,9 @@ import SiteIdentity from "./SiteIdentity.astro";
 const currentYear = new Date().getFullYear();
 ---
 
-<footer class="kanit-light text-xs sm:text-sm">
+<footer class="kanit-light relative isolate overflow-hidden text-xs sm:text-sm">
   <div
-    class="footer-primary flex flex-col items-center justify-center min-w-full border-t border-gray-500/50"
+    class="footer-primary relative z-10 flex flex-col items-center justify-center min-w-full border-t border-gray-500/50 pb-24 sm:pb-20"
   >
     <div
       class="flex flex-row items-center justify-around sm:justify-center gap-2 sm:gap-6 pt-6 pb-3 sm:px-6 text-center"
@@ -21,7 +21,7 @@ const currentYear = new Date().getFullYear();
     </div>
   </div>
   <div
-    class="footer-secondary flex flex-col sm:flex-row items-center justify-between gap-6 min-w-full"
+    class="footer-secondary relative z-10 flex flex-col sm:flex-row items-center justify-between gap-6 min-w-full"
   >
     <div class="flex flex-row gap-2 items-center justify-start text-balance">
       <span>&copy; {currentYear}</span>
@@ -38,10 +38,11 @@ const currentYear = new Date().getFullYear();
     </div>
   </div>
   <div
-    class="footer-identity h-40 sm:h-18 text-center overflow-clip sticky bottom-0 items-end"
+    aria-hidden="true"
+    class="footer-identity pointer-events-none absolute inset-x-0 bottom-0 z-0 h-40 sm:h-18 overflow-clip text-center"
   >
     <span
-      class="sigmar-ff text-8xl sm:text-[6.5rem] leading-none text-whitesmoke/50 dark:text-gray-300/30"
+      class="sigmar-ff text-[4.75rem] leading-none text-whitesmoke/35 sm:text-[6.5rem] dark:text-gray-300/20"
       >{siteConfig.title}</span
     >
   </div>
