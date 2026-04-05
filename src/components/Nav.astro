@@ -33,51 +33,72 @@ const { activePage } = Astro.props;
   </div>
 </header>
 <script is:inline>
-  const hamburgerMenu = document.querySelector("#hamburger-menu");
-  const mobileLinks = document.querySelector("#mobile-links");
+  let closeTimer = null;
 
-  if (hamburgerMenu && mobileLinks) {
-    let closeTimer = null;
+  const getMobileLinks = () => document.querySelector("#mobile-links");
 
-    const openMenu = () => {
-      if (closeTimer) {
-        window.clearTimeout(closeTimer);
+  const openMenu = () => {
+    const mobileLinks = getMobileLinks();
+    if (!mobileLinks) {
+      return;
+    }
+
+    if (closeTimer) {
+      window.clearTimeout(closeTimer);
+      closeTimer = null;
+    }
+
+    mobileLinks.classList.remove("hidden", "slideOutUp");
+    mobileLinks.classList.add("expanded", "slideInDown");
+  };
+
+  const closeMenu = () => {
+    const mobileLinks = getMobileLinks();
+    if (!mobileLinks) {
+      return;
+    }
+
+    if (closeTimer) {
+      window.clearTimeout(closeTimer);
+      closeTimer = null;
+    }
+
+    mobileLinks.classList.remove("slideInDown");
+    mobileLinks.classList.add("slideOutUp");
+
+    closeTimer = window.setTimeout(() => {
+      const currentMobileLinks = getMobileLinks();
+      if (!currentMobileLinks) {
         closeTimer = null;
+        return;
       }
 
-      mobileLinks.classList.remove("hidden", "slideOutUp");
-      mobileLinks.classList.add("expanded", "slideInDown");
-    };
+      currentMobileLinks.classList.add("hidden");
+      currentMobileLinks.classList.remove("expanded", "slideOutUp");
+      closeTimer = null;
+    }, 180);
+  };
 
-    const closeMenu = () => {
-      if (closeTimer) {
-        window.clearTimeout(closeTimer);
-        closeTimer = null;
-      }
+  document.addEventListener("click", (event) => {
+    if (!(event.target instanceof Element)) {
+      return;
+    }
 
-      mobileLinks.classList.remove("slideInDown");
-      mobileLinks.classList.add("slideOutUp");
+    if (event.target.closest("#hamburger-menu")) {
+      openMenu();
+      return;
+    }
 
-      closeTimer = window.setTimeout(() => {
-        mobileLinks.classList.add("hidden");
-        mobileLinks.classList.remove("expanded", "slideOutUp");
-        closeTimer = null;
-      }, 180);
-    };
+    if (
+      event.target.closest(".close-menu") ||
+      event.target.closest("#mobile-links a")
+    ) {
+      closeMenu();
+    }
+  });
 
-    hamburgerMenu.addEventListener("click", openMenu);
-    mobileLinks.addEventListener("click", (event) => {
-      if (
-        event.target instanceof Element &&
-        (event.target.closest(".close-menu") || event.target.closest("a"))
-      ) {
-        closeMenu();
-      }
-    });
-
-    document.addEventListener("swup:visit:start", closeMenu);
-    document.addEventListener("swup:page:view", closeMenu);
-  }
+  document.addEventListener("swup:visit:start", closeMenu);
+  document.addEventListener("swup:page:view", closeMenu);
 </script>
 
 <style>
