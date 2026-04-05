@@ -37,18 +37,31 @@ const { activePage } = Astro.props;
   const mobileLinks = document.querySelector("#mobile-links");
 
   if (hamburgerMenu && mobileLinks) {
+    let closeTimer = null;
+
     const openMenu = () => {
+      if (closeTimer) {
+        window.clearTimeout(closeTimer);
+        closeTimer = null;
+      }
+
       mobileLinks.classList.remove("hidden", "slideOutUp");
       mobileLinks.classList.add("expanded", "slideInDown");
     };
 
     const closeMenu = () => {
+      if (closeTimer) {
+        window.clearTimeout(closeTimer);
+        closeTimer = null;
+      }
+
       mobileLinks.classList.remove("slideInDown");
       mobileLinks.classList.add("slideOutUp");
 
-      window.setTimeout(() => {
+      closeTimer = window.setTimeout(() => {
         mobileLinks.classList.add("hidden");
         mobileLinks.classList.remove("expanded", "slideOutUp");
+        closeTimer = null;
       }, 180);
     };
 
@@ -61,6 +74,9 @@ const { activePage } = Astro.props;
         closeMenu();
       }
     });
+
+    document.addEventListener("swup:visit:start", closeMenu);
+    document.addEventListener("swup:page:view", closeMenu);
   }
 </script>
 
