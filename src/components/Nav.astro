@@ -1,5 +1,5 @@
 ---
-import siteConfig, { type Link } from "../site.config";
+import siteConfig from "../site.config";
 import Hamburger from "./Hamburger.astro";
 import ThemeSwitcher from "./ThemeSwitcher.astro";
 import SiteIdentity from "./SiteIdentity.astro";
@@ -12,16 +12,19 @@ const { activePage } = Astro.props;
   <nav class="font-light w-full">
     <a href={withBase("/")}><SiteIdentity /></a>
     <div class="hidden sm:flex sm:gap-8">
-      {(<NavLinks activePage={activePage} links={siteConfig.headerNavLinks} />)}
+      <NavLinks activePage={activePage} links={siteConfig.headerNavLinks} />
     </div>
     <ThemeSwitcher />
     <Hamburger />
   </nav>
   <div
     id="mobile-links"
-    class="font-light animated h-0 m-0 opacity-0 top-0 w-full"
+    class="font-light animated hidden w-full"
+    aria-label="Mobile navigation"
   >
-    <span class="close-menu">❌</span>
+    <button class="close-menu self-end" type="button" aria-label="Close menu">
+      ✕
+    </button>
     <NavLinks
       activePage={activePage}
       links={siteConfig.headerNavLinks}
@@ -30,19 +33,32 @@ const { activePage } = Astro.props;
   </div>
 </header>
 <script is:inline>
-  document.querySelector("#hamburger-menu").addEventListener("click", () => {
-    console.log("clicked...");
-    document.querySelector("#mobile-links").classList.remove("slideOutUp");
-    document.querySelector("#mobile-links").classList.add("expanded");
-    document.querySelector("#mobile-links").classList.add("slideInDown");
-  });
+  const hamburgerMenu = document.querySelector("#hamburger-menu");
+  const mobileLinks = document.querySelector("#mobile-links");
 
-  document.querySelector(".close-menu").addEventListener("click", () => {
-    console.log("clicked...");
-    document.querySelector("#mobile-links").classList.add("slideOutUp");
-    document.querySelector("#mobile-links").classList.add("expanded");
-    document.querySelector("#mobile-links").classList.remove("slideInDown");
-  });
+  if (hamburgerMenu && mobileLinks) {
+    const openMenu = () => {
+      mobileLinks.classList.remove("hidden", "slideOutUp");
+      mobileLinks.classList.add("expanded", "slideInDown");
+    };
+
+    const closeMenu = () => {
+      mobileLinks.classList.remove("slideInDown");
+      mobileLinks.classList.add("slideOutUp");
+
+      window.setTimeout(() => {
+        mobileLinks.classList.add("hidden");
+        mobileLinks.classList.remove("expanded", "slideOutUp");
+      }, 180);
+    };
+
+    hamburgerMenu.addEventListener("click", openMenu);
+    mobileLinks.addEventListener("click", (event) => {
+      if (event.target instanceof Element && event.target.closest(".close-menu")) {
+        closeMenu();
+      }
+    });
+  }
 </script>
 
 <style>
@@ -54,19 +70,32 @@ const { activePage } = Astro.props;
       display: flex;
       flex-direction: column;
       gap: 0.5rem;
-      justify-content: end;
+      justify-content: start;
       position: absolute;
-      z-index: 10;
+      z-index: 30;
       opacity: 1;
-      padding: 1rem 2rem;
+      padding: 0.75rem 1rem 1rem;
       width: 100vw;
-      top: 0;
-      min-height: fit-content;
+      top: calc(100% + 0.5rem);
+      left: 0;
+      right: 0;
+      max-height: calc(100svh - 6rem);
+      overflow-y: auto;
       border-bottom-left-radius: 0.5rem;
       border-bottom-right-radius: 0.5rem;
     }
+
     html.light #mobile-links.expanded {
       background-color: #ffffff6a;
     }
+  }
+
+  .close-menu {
+    cursor: pointer;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font-size: 1.25rem;
+    line-height: 1;
   }
 </style>
