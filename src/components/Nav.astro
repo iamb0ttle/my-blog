@@ -23,7 +23,7 @@ const { activePage } = Astro.props;
     aria-label="Mobile navigation"
   >
     <button class="close-menu self-end" type="button" aria-label="Close menu">
-      ✕
+      <span aria-hidden="true">&times;</span>
     </button>
     <NavLinks
       activePage={activePage}
@@ -54,7 +54,10 @@ const { activePage } = Astro.props;
 
     hamburgerMenu.addEventListener("click", openMenu);
     mobileLinks.addEventListener("click", (event) => {
-      if (event.target instanceof Element && event.target.closest(".close-menu")) {
+      if (
+        event.target instanceof Element &&
+        (event.target.closest(".close-menu") || event.target.closest("a"))
+      ) {
         closeMenu();
       }
     });
@@ -71,16 +74,14 @@ const { activePage } = Astro.props;
       flex-direction: column;
       gap: 0.5rem;
       justify-content: start;
-      position: absolute;
-      z-index: 30;
+      position: static;
+      z-index: 0;
       opacity: 1;
+      margin-top: 0.5rem;
       padding: 0.75rem 1rem 1rem;
-      width: 100vw;
-      top: calc(100% + 0.5rem);
-      left: 0;
-      right: 0;
-      max-height: calc(100svh - 6rem);
-      overflow-y: auto;
+      width: 100%;
+      max-height: none;
+      overflow: visible;
       border-bottom-left-radius: 0.5rem;
       border-bottom-right-radius: 0.5rem;
     }
@@ -91,11 +92,15 @@ const { activePage } = Astro.props;
   }
 
   .close-menu {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
     border: 0;
     background: transparent;
     color: inherit;
     font-size: 1.25rem;
     line-height: 1;
+    padding: 0.25rem;
   }
 </style>
